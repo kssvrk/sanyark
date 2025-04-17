@@ -1,0 +1,876 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sanyark Space | Integrated PNT & Communications</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+            /* Import Google Font */
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+            /* CSS Variables */
+            :root {
+                --primary: #3B82F6; /* Blue-500 */
+                --primary-dark: #2563EB; /* Blue-600 */
+                --secondary: #8B5CF6; /* Violet-500 */
+                --dark: #0F172A; /* Slate-900 */
+                --darker: #020617; /* Slate-950 */
+                --light: #F8FAFC; /* Slate-50 */
+                --card-bg: rgba(15, 23, 42, 0.7); /* Slightly more opaque */
+                --card-border: rgba(51, 65, 85, 0.5);
+                --card-hover-border: rgba(59, 130, 246, 0.5);
+                --section-padding: theme('spacing.28'); /* py-28 */
+            }
+
+            /* Base body styling */
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                background-color: var(--darker);
+                color: var(--light);
+                overflow-x: hidden;
+                -webkit-font-smoothing: antialiased;
+                scroll-behavior: smooth;
+            }
+
+            /* Navbar */
+            .navbar { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background-color: rgba(2, 6, 23, 0.85); }
+
+            /* General section styling */
+            .section { position: relative; overflow: hidden; padding-top: var(--section-padding); padding-bottom: var(--section-padding); }
+            .section-alt-bg { background-color: rgba(15, 23, 42, 0.3); /* bg-slate-900/30 */ }
+            .section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 70%); pointer-events: none; }
+
+            /* Gradient text utility */
+            .gradient-text { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+            /* Fade-in setup */
+            .fade-in { opacity: 0; transition: opacity 0.6s ease-out; }
+            .fade-in.visible { opacity: 1; }
+            .fade-in-transform { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+            .fade-in-transform.visible { opacity: 1; transform: translateY(0); }
+
+            /* Custom scrollbar */
+            ::-webkit-scrollbar { width: 8px; }
+            ::-webkit-scrollbar-track { background: var(--darker); }
+            ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+            /* --- Hero Section Styles (Mostly unchanged) --- */
+            @keyframes orbit { 0% { transform: rotate(0deg) translateX(150px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(150px) rotate(-360deg); } }
+            .satellite { width: 24px; height: 8px; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px; position: absolute; box-shadow: 0 0 12px rgba(59, 130, 246, 0.7); }
+            .satellite::after { content: ''; position: absolute; right: -4px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 8px white; }
+            .constellation-dot { position: absolute; background: white; border-radius: 50%; box-shadow: 0 0 5px white; opacity: 0; animation: fadeInDot 1.5s ease-out forwards, twinkle 5s ease-in-out infinite; }
+            @keyframes fadeInDot { to { opacity: 0.7; } }
+            @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+            @keyframes float { 0% { transform: translate(-50%, -50%) translateY(0px); } 50% { transform: translate(-50%, -50%) translateY(-12px); } 100% { transform: translate(-50%, -50%) translateY(0px); } }
+            .floating { animation: float 8s ease-in-out infinite; }
+            @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+            .pulse { animation: pulse 2s infinite; }
+            @keyframes dataStream { 0% { transform: translateY(-100%); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(100%); opacity: 0; } }
+            .data-stream { position: absolute; width: 2px; height: 20px; background: linear-gradient(to bottom, transparent, var(--primary), transparent); animation: dataStream 1.5s linear infinite; }
+
+            /* --- PNT+COMMS Section Styles (Mostly unchanged) --- */
+            .grid-pattern { background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+            @keyframes slowRotate { from { transform: translate(-50%, -50%) rotate(15deg); } to { transform: translate(-50%, -50%) rotate(375deg); } }
+            @keyframes pulseScale { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+            @keyframes pulseOpacity { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+            .comms-central-satellite { position: absolute; top: 50%; left: 50%; animation: slowRotate 25s linear infinite; }
+            .comms-connected-satellite { position: absolute; width: 64px; height: 32px; background-color: rgba(59, 130, 246, 0.2); border-radius: 9999px; display: flex; align-items: center; justify-content: center; animation: pulseScale 3.5s ease-in-out infinite; }
+            .comms-connected-satellite-inner { width: 48px; height: 16px; background: linear-gradient(to right, var(--primary), var(--secondary)); border-radius: 9999px; }
+            .comms-connection-line { stroke: url(#gradient); stroke-width: 1; stroke-dasharray: 4 2; animation: pulseOpacity 3.5s ease-in-out infinite; }
+
+            /* --- Mission Section Styling (Vertical Stepper) --- */
+            .mission-stepper {
+                position: relative;
+                max-width: 36rem; /* max-w-xl */
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 2rem; /* Add padding for the line */
+            }
+            /* The connecting vertical line */
+            .mission-stepper::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 1rem;
+                bottom: 1rem;
+                width: 3px;
+                background-color: var(--card-border);
+                border-radius: 1.5px;
+            }
+            /* Animated part of the line */
+            .mission-stepper-line-progress {
+                position: absolute;
+                left: 0;
+                top: 1rem;
+                width: 3px;
+                background: linear-gradient(to bottom, var(--primary), var(--secondary));
+                border-radius: 1.5px;
+                height: 0; /* Initially hidden */
+                transition: height 0.5s ease-out; /* Animate height */
+            }
+            .mission-step {
+                position: relative;
+                margin-bottom: 4rem; /* Space between steps */
+                padding-left: 2rem; /* Space for icon */
+                opacity: 0;
+                transform: translateX(20px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+            .fade-in.visible .mission-step {
+                opacity: 1;
+                transform: translateX(0);
+                /* Staggered delay handled by JS adding 'visible' to each step */
+            }
+            .mission-step:last-child {
+                margin-bottom: 0;
+            }
+            /* Step Icon/Marker */
+            .mission-step-icon {
+                position: absolute;
+                left: -1.5rem; /* Position over the line */
+                top: 0.125rem; /* Align vertically */
+                width: 3rem; /* w-12 */
+                height: 3rem; /* h-12 */
+                border-radius: 9999px; /* rounded-full */
+                background-color: var(--darker);
+                border: 3px solid var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary);
+                font-size: 1.25rem; /* text-xl */
+                z-index: 1;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .mission-step.visible .mission-step-icon {
+                transform: scale(1.1);
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            }
+            .mission-step-content {
+                background-color: var(--card-bg);
+                border: 1px solid var(--card-border);
+                border-radius: 0.75rem; /* rounded-xl */
+                padding: 1.5rem; /* p-6 */
+            }
+
+            /* --- Technology Section Styling (Interactive Diagram) --- */
+            .tech-diagram {
+                position: relative;
+                width: 100%;
+                max-width: 48rem; /* max-w-3xl */
+                margin: 3rem auto;
+                aspect-ratio: 4 / 3; /* Maintain aspect ratio */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .tech-diagram-center {
+                width: 8rem; /* w-32 */
+                height: 8rem; /* h-32 */
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(15, 23, 42, 0.5) 70%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                z-index: 1;
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            }
+            .tech-diagram-center i {
+                font-size: 2.5rem; /* text-4xl */
+                color: var(--primary);
+                opacity: 0.8;
+            }
+            .tech-pillar {
+                position: absolute;
+                width: 10rem; /* Adjust size as needed */
+                text-align: center;
+                opacity: 0;
+                transform: scale(0.8);
+                transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            }
+            .fade-in.visible .tech-pillar {
+                opacity: 1;
+                transform: scale(1);
+                /* Staggered delay handled by JS adding 'visible' */
+            }
+            .tech-pillar-icon {
+                width: 4rem; /* w-16 */
+                height: 4rem; /* h-16 */
+                border-radius: 50%;
+                background-color: var(--card-bg);
+                border: 2px solid var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1rem auto;
+                color: var(--primary);
+                font-size: 1.5rem; /* text-2xl */
+                cursor: pointer;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .tech-pillar-icon:hover {
+                transform: scale(1.1);
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            }
+            .tech-pillar h3 {
+                font-size: 1.125rem; /* text-lg */
+                font-weight: 600; /* font-semibold */
+                margin-bottom: 0.5rem;
+            }
+            .tech-pillar p {
+                font-size: 0.875rem; /* text-sm */
+                color: #94a3b8; /* text-slate-400 */
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                transition: max-height 0.5s ease-out, opacity 0.5s ease-out 0.1s;
+            }
+            .tech-pillar.active p {
+                max-height: 100px; /* Adjust as needed */
+                opacity: 1;
+            }
+            /* Positioning the pillars (adjust angles/distances as needed) */
+            .tech-pillar-1 { top: -2rem; left: 50%; transform: translateX(-50%) scale(0.8); }
+            .tech-pillar-2 { bottom: 1rem; left: 0rem; transform: scale(0.8); }
+            .tech-pillar-3 { bottom: 1rem; right: 0rem; transform: scale(0.8); }
+
+            /* Lines connecting center to pillars (using pseudo-elements or SVG) */
+            /* This is simplified using borders for demo; SVG would be better */
+            .tech-pillar::before {
+                content: '';
+                position: absolute;
+                border-left: 2px dashed var(--primary);
+                opacity: 0.5;
+                z-index: 0;
+                /* Specific positioning for each line */
+            }
+            .tech-pillar-1::before { height: 4rem; top: 4rem; left: 50%; transform: translateX(-50%); }
+            .tech-pillar-2::before { width: 8rem; height: 6rem; top: -4rem; left: 5rem; border-bottom: 2px dashed var(--primary); border-left: none; border-radius: 0 0 0 100%; }
+            .tech-pillar-3::before { width: 8rem; height: 6rem; top: -4rem; right: 5rem; border-bottom: 2px dashed var(--primary); border-left: none; border-radius: 0 0 100% 0; }
+
+
+            /* --- Impact Section Styling (Carousel) --- */
+            .impact-carousel-container {
+                position: relative;
+                width: 100%;
+                overflow: hidden;
+            }
+            .impact-carousel-track {
+                display: flex;
+                transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Smooth transition with overshoot */
+            }
+            .impact-slide {
+                flex: 0 0 100%; /* Each slide takes full width */
+                width: 100%;
+                min-height: 450px; /* Ensure minimum height */
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 3rem;
+                border-radius: 1rem;
+                overflow: hidden; /* Clip background effects */
+                opacity: 0;
+                transform: scale(0.9);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+            .fade-in.visible .impact-slide {
+                opacity: 1;
+                transform: scale(1);
+            }
+            /* Backgrounds for slides */
+            .impact-slide::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+                background-size: cover;
+                background-position: center;
+                opacity: 0.15; /* Dim background */
+                transition: opacity 0.5s ease, transform 0.5s ease;
+            }
+            .impact-slide:hover::before {
+                opacity: 0.25;
+                transform: scale(1.05);
+            }
+             /* --- Impact Section Styling ('Transformative Applications') --- */
+        .impact-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem; /* rounded-2xl */
+            padding: 2rem; /* p-8 */
+            text-align: center;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; /* Start hidden for animation */
+            transform: scale(0.95); /* Start slightly smaller */
+        }
+         .fade-in.visible .impact-card {
+            opacity: 1;
+            transform: scale(1);
+            /* Staggered animation delay applied via inline style */
+            transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease; /* Added bounce */
+        }
+        .impact-card:hover {
+            transform: scale(1.05); /* Zoom in on hover */
+            border-color: var(--card-hover-border);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
+        .impact-icon-container {
+            width: 4rem; /* w-16 */
+            height: 4rem; /* h-16 */
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: rgba(59, 130, 246, 0.1); /* bg-primary/10 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem; /* mb-6 */
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--primary);
+            font-size: 1.5rem; /* text-2xl */
+            transition: transform 0.3s ease; /* Add transition for hover effect */
+        }
+        .impact-card:hover .impact-icon-container {
+             transform: scale(1.1); /* Scale icon container on card hover */
+        }
+
+        /* Individual Impact Icon Animations */
+        @keyframes flyPlane { 0%, 100% { transform: translateX(0) translateY(0) rotate(-5deg); } 50% { transform: translateX(3px) translateY(-2px) rotate(0deg); } }
+        .icon-plane i { animation: flyPlane 3s ease-in-out infinite; }
+
+        @keyframes rockShip { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+        .icon-ship i { animation: rockShip 4s ease-in-out infinite; }
+
+        @keyframes pulseTower { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; transform: scale(1.05); } }
+        .icon-tower i { animation: pulseTower 2s ease-in-out infinite; }
+
+        @keyframes moveMountain { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+        /* Note: FontAwesome mountain icon is complex; simple effect */
+        .icon-mountain i { animation: moveMountain 5s ease-in-out infinite; }
+
+        @keyframes spinCog { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .icon-cogs i { animation: spinCog 8s linear infinite; }
+
+        @keyframes shieldPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.3); } 70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); } }
+        .icon-shield .fa-user-shield { animation: shieldPulse 2.5s infinite; border-radius: 50%; /* Helps visualize pulse */ }
+
+            /* Example Backgrounds (replace with actual images or more distinct gradients) */
+            .impact-slide-1::before { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://placehold.co/1200x600/020617/3B82F6?text=Autonomous'); }
+            .impact-slide-2::before { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://placehold.co/1200x600/020617/8B5CF6?text=Maritime'); }
+            .impact-slide-3::before { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://placehold.co/1200x600/020617/10B981?text=Connectivity'); }
+            .impact-slide-4::before { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://placehold.co/1200x600/020617/F59E0B?text=Disaster'); }
+            .impact-slide-5::before { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://placehold.co/1200x600/020617/EC4899?text=IoT'); }
+            .impact-slide-6::before { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://placehold.co/1200x600/020617/EF4444?text=Defense'); }
+
+            .impact-slide-content {
+                position: relative;
+                z-index: 1;
+                max-width: 600px;
+                background: rgba(2, 6, 23, 0.6); /* Darker semi-transparent background */
+                padding: 2rem;
+                border-radius: 0.75rem;
+                backdrop-filter: blur(5px);
+            }
+            .impact-slide-icon {
+                font-size: 2.5rem; /* text-4xl */
+                color: var(--primary);
+                margin-bottom: 1rem;
+            }
+            .impact-slide h3 {
+                font-size: 1.5rem; /* text-2xl */
+                font-weight: 600; /* font-semibold */
+                margin-bottom: 0.75rem;
+            }
+            .impact-slide p {
+                color: #cbd5e1; /* text-slate-300 */
+            }
+            /* Carousel Navigation */
+            .carousel-nav {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 10;
+                background-color: rgba(15, 23, 42, 0.7);
+                color: var(--light);
+                border: 1px solid var(--card-border);
+                border-radius: 50%;
+                width: 3rem;
+                height: 3rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+            .carousel-nav:hover {
+                background-color: rgba(59, 130, 246, 0.5);
+                transform: translateY(-50%) scale(1.1);
+            }
+            .carousel-prev { left: 1rem; }
+            .carousel-next { right: 1rem; }
+
+            /* --- CTA Button Styling --- */
+            .cta-button { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; background-image: linear-gradient(to right, var(--primary), var(--secondary)); border-radius: 9999px; font-weight: 500; color: white; transition: opacity 0.3s ease, transform 0.3s ease; text-decoration: none; }
+            .cta-button:hover { opacity: 0.9; transform: scale(1.03); }
+            .cta-button i { margin-left: 0.5rem; font-size: 0.75rem; }
+
+        </style>
+    </head>
+    <body class="antialiased">
+        <nav class="navbar fixed w-full z-50">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        
+                        <span class="text-xl font-semibold"> <b>Sanyark Space</b></span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#mission" class="text-slate-300 hover:text-white transition-colors duration-300">Mission</a>
+                        <a href="#comms" class="text-slate-300 hover:text-white transition-colors duration-300">PNT+COMMS</a>
+                        <a href="#technology" class="text-slate-300 hover:text-white transition-colors duration-300">Technology</a>
+                        <a href="#impact" class="text-slate-300 hover:text-white transition-colors duration-300">Impact</a>
+                        <a href="mailto:raghavak@sanyark.com" class="text-slate-300 hover:text-white transition-colors duration-300">Contact</a>
+                    </div>
+                    <div class="md:hidden">
+                        <a href="mailto:raghavak@sanyark.com" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary rounded-full text-sm font-medium hover:opacity-90 transition-opacity"> Contact </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <section class="section min-h-screen flex items-center pt-24 md:pt-20">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col lg:flex-row items-center">
+                    <div class="lg:w-1/2 mb-16 lg:mb-0 fade-in-transform text-center lg:text-left">
+                        <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6"> The Future is <span class="gradient-text">FUSED </span><br><br>PNT + Communication <br><br></h1>
+                        <p class="text-lg text-slate-300 mb-8 max-w-lg mx-auto lg:mx-0"> Sanyark Space is building the next generation of space infrastructure, delivering precise positioning and high-bandwidth communications from a unified LEO constellation. </p>
+                        <div class="flex justify-center lg:justify-start"> <a href="mailto:raghavak@sanyark.com" class="cta-button"> <span>Get in Touch</span> <i class="fas fa-arrow-right"></i> </a> </div>
+                    </div>
+                    <div class="lg:w-1/2 relative fade-in" style="animation-delay: 0.2s;">
+                        <div class="relative" style="height: 500px;">
+                            <div class="absolute top-1/2 left-1/2 w-64 h-64 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 shadow-xl flex items-center justify-center floating">
+                                <div class="w-48 h-48 rounded-full bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center">
+                                    <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+                                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary pulse"></div>
+                                    </div>
+                                </div>
+                                <div class="data-stream" style="left: 20%; animation-delay: 0.2s;"></div> <div class="data-stream" style="left: 30%; animation-delay: 0.4s;"></div> <div class="data-stream" style="left: 70%; animation-delay: 0.6s;"></div> <div class="data-stream" style="left: 80%; animation-delay: 0.8s;"></div>
+                            </div>
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"> <div class="satellite" style="animation: orbit 12s linear infinite;"> <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-1 h-8 bg-primary/50 rounded-full"></div> </div> </div>
+                            <div id="constellation-dots" class="absolute inset-0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comms" class="section section-alt-bg grid-pattern mt-10 mb-10 pt-10 pb-10">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="lg:w-1/2 fade-in-transform">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-8"> A <span class="gradient-text">Unified</span> Constellation </h2>
+                        <p class="text-lg text-slate-300 mb-8"> Our LEO satellites are designed to simultaneously provide precise positioning signals and high-speed data links, streamlining space-based services. </p>
+                        <div class="space-y-6">
+                            <div class="flex"> <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mr-6 flex-shrink-0"> <i class="fas fa-broadcast-tower text-primary"></i> </div> <div> <h3 class="text-xl font-semibold mb-2">Multi-Band Connectivity</h3> <p class="text-slate-400"> Utilizing diverse frequency bands like Ka and L-band for optimal high-throughput and resilient connectivity. </p> </div> </div>
+                            <div class="flex"> <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mr-6 flex-shrink-0"> <i class="fas fa-project-diagram text-primary"></i> </div> <div> <h3 class="text-xl font-semibold mb-2">Orbital Mesh Network</h3> <p class="text-slate-400"> Planning for optical inter-satellite links to create a robust, self-healing network in space. </p> </div> </div>
+                            <div class="flex"> <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mr-6 flex-shrink-0"> 
+                                <i class="fas fa-shield-alt text-primary"></i> </div> <div> <h3 class="text-xl font-semibold mb-2">Precise Positioning </h3> 
+                                    <p class="text-slate-400"> Our advanced positioning technology provides centimeter-level accuracy for precise navigation and tracking. </p>    </div> </div>
+                            <div class="flex"> <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mr-6 flex-shrink-0"> <i class="fas fa-cogs text-primary"></i> </div> <div> <h3 class="text-xl font-semibold mb-2">Modular Design</h3> <p class="text-slate-400"> Our satellites are built with modular components for easy upgrades and maintenance. </p> </div> </div>
+
+                            
+                            </div>
+                    </div>
+                    <div class="lg:w-1/2 relative fade-in" style="animation-delay: 0.2s;">
+                        <div class="relative" style="height: 500px;">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="comms-central-satellite"> <div class="satellite" style="width: 120px; height: 24px; position: static; transform: none;"> <div class="absolute -top-4 left-1/4 transform -translate-x-1/2 w-1 h-12 bg-primary/50 rounded-full"></div> <div class="absolute -top-4 right-1/4 transform translate-x-1/2 w-1 h-12 bg-secondary/50 rounded-full"></div> </div> </div>
+                                <div class="comms-connected-satellite" style="top: 20%; left: 20%; animation-delay: 0s;"> <div class="comms-connected-satellite-inner"></div> </div> <div class="comms-connected-satellite" style="bottom: 20%; right: 20%; animation-delay: 1.5s;"> <div class="comms-connected-satellite-inner"></div> </div> <div class="comms-connected-satellite" style="top: 30%; right: 15%; animation-delay: 0.5s;"> <div class="comms-connected-satellite-inner"></div> </div> <div class="comms-connected-satellite" style="bottom: 25%; left: 18%; animation-delay: 1.0s;"> <div class="comms-connected-satellite-inner"></div> </div>
+                                <svg class="absolute inset-0 w-full h-full opacity-75" xmlns="http://www.w3.org/2000/svg"> <defs> <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%"> <stop offset="0%" stop-color="var(--primary)" /> <stop offset="100%" stop-color="var(--secondary)" /> </linearGradient> </defs> <line class="comms-connection-line" style="animation-delay: 0s;" x1="50%" y1="50%" x2="calc(20% + 32px)" y2="calc(20% + 16px)" /> <line class="comms-connection-line" style="animation-delay: 1.5s;" x1="50%" y1="50%" x2="calc(80% - 32px)" y2="calc(80% - 16px)" /> <line class="comms-connection-line" style="animation-delay: 0.5s;" x1="50%" y1="50%" x2="calc(85% - 32px)" y2="calc(30% + 16px)" /> <line class="comms-connection-line" style="animation-delay: 1.0s;" x1="50%" y1="50%" x2="calc(18% + 32px)" y2="calc(75% - 16px)" /> </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mission" class="section">
+            <div class="container mx-auto px-6 mt-10 mb-10 pb-10 pt-10">
+                <div class="max-w-4xl mx-auto text-center mb-20 fade-in-transform">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6"> Redefining <span class="gradient-text">Space Infrastructure</span> </h2>
+                    <p class="text-lg text-slate-300"> Traditional systems require separate PNT and communications infrastructure. Our integrated approach aims to deliver enhanced capabilities and efficiency through a single, resilient constellation. </p>
+                </div>
+
+                <div class="mission-stepper fade-in"> <div class="mission-stepper-line-progress"></div> <div class="mission-step" data-step="1">
+                        <div class="mission-step-icon"> <i class="fas fa-wifi"></i> </div>
+                        <div class="mission-step-content">
+                            <h3 class="text-xl font-semibold mb-3">Unified PNT+Comms Signal</h3>
+                            <p class="text-slate-400"> Developing an innovative waveform designed to carry both navigation data and communications payload efficiently. </p>
+                        </div>
+                    </div>
+                    <div class="mission-step" data-step="2">
+                        <div class="mission-step-icon"> <i class="fas fa-tachometer-alt"></i> </div>
+                        <div class="mission-step-content">
+                            <h3 class="text-xl font-semibold mb-3">High-Speed Data Links</h3>
+                            <p class="text-slate-400"> Targeting significant data transfer capabilities alongside robust positioning performance. </p>
+                        </div>
+                    </div>
+                    <div class="mission-step" data-step="3">
+                        <div class="mission-step-icon"> <i class="fas fa-stopwatch-20"></i> </div>
+                        <div class="mission-step-content">
+                            <h3 class="text-xl font-semibold mb-3">Low-Latency Network</h3>
+                            <p class="text-slate-400"> Leveraging LEO architecture to minimize signal delay, enabling more responsive applications. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="technology" class="section section-alt-bg">
+            <div class="container mx-auto px-6 mt-10 mb-10 pb-10 pt-10">
+                <div class="max-w-4xl mx-auto text-center mb-12 md:mb-20 fade-in-transform"> <h2 class="text-3xl md:text-4xl font-bold mb-6"> Core <span class="gradient-text">Technology</span> Pillars </h2>
+                    <p class="text-lg text-slate-300"> Our approach is built on key technological innovations designed to overcome the challenges of integrated PNT and communications. (Hover over icons for details) </p>
+                </div>
+
+                <div class="tech-diagram fade-in"> <div class="tech-diagram-center">
+                        <i class="fas fa-satellite-dish"></i> </div>
+
+                    <div class="tech-pillar tech-pillar-1" data-pillar="1">
+                        <div class="tech-pillar-icon icon-waveform"> <i class="fas fa-wave-square"></i> </div>
+                        <h3>Adaptive Waveform</h3>
+                        <p> Designing signals that can dynamically allocate resources between navigation and data services based on demand. </p>
+                    </div>
+
+                    <div class="tech-pillar tech-pillar-2" data-pillar="2">
+                        <div class="tech-pillar-icon icon-clock"> <i class="fas fa-clock"></i> </div>
+                        <h3>Precision Timing</h3>
+                        <p> Implementing advanced timing systems across the constellation for high-accuracy positioning and network synchronization. </p>
+                    </div>
+
+                    <div class="tech-pillar tech-pillar-3" data-pillar="3">
+                        <div class="tech-pillar-icon icon-dish"> <i class="fas fa-satellite-dish"></i> </div>
+                        <h3>Phased Array Antennas</h3>
+                        <p> Utilizing electronically steerable beams to maintain multiple high-gain connections for navigation and data transfer. </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="section py-28">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center mb-20 fade-in-transform">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                        Enabling <span class="gradient-text">Transformative</span> Applications
+                    </h2>
+                    <p class="text-lg text-slate-300">
+                        Our integrated PNT+Comms constellation unlocks potential across diverse industries previously limited by separate systems.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 fade-in"> <div class="impact-card" style="--delay: 0.1s;">
+                        <div class="impact-icon-container icon-plane"> <i class="fas fa-plane"></i> </div>
+                        <h3 class="text-xl font-semibold mb-3">Autonomous Systems</h3>
+                        <p class="text-slate-400"> Reliable, high-accuracy positioning combined with real-time data streaming for drones, vehicles, and robotics. </p>
+                    </div>
+                    <div class="impact-card" style="--delay: 0.2s;">
+                        <div class="impact-icon-container icon-ship"> <i class="fas fa-ship"></i> </div>
+                        <h3 class="text-xl font-semibold mb-3">Maritime & Logistics</h3>
+                        <p class="text-slate-400"> Precise asset tracking with continuous broadband connectivity for global supply chains. </p>
+                    </div>
+                    <div class="impact-card" style="--delay: 0.3s;">
+                        <div class="impact-icon-container icon-tower"> <i class="fas fa-tower-broadcast"></i> </div>
+                        <h3 class="text-xl font-semibold mb-3">Remote Connectivity</h3>
+                        <p class="text-slate-400"> Providing critical timing and data backhaul for telecom networks and infrastructure in underserved areas. </p>
+                    </div>
+                    <div class="impact-card" style="--delay: 0.4s;">
+                        <div class="impact-icon-container icon-mountain"> <i class="fas fa-mountain"></i> </div>
+                        <h3 class="text-xl font-semibold mb-3">Disaster Response</h3>
+                        <p class="text-slate-400"> Ensuring resilient positioning and communications capabilities when terrestrial systems fail. </p>
+                    </div>
+                    <div class="impact-card" style="--delay: 0.5s;">
+                        <div class="impact-icon-container icon-cogs"> <i class="fas fa-cogs"></i> </div>
+                        <h3 class="text-xl font-semibold mb-3">Industrial IoT</h3>
+                        <p class="text-slate-400"> Synchronized operations and real-time data feeds for critical infrastructure and remote monitoring. </p>
+                    </div>
+                    <div class="impact-card" style="--delay: 0.6s;">
+                        <div class="impact-icon-container icon-shield"> <i class="fas fa-user-shield"></i> </div>
+                        <h3 class="text-xl font-semibold mb-3">Government & Defense</h3>
+                        <p class="text-slate-400"> Developing secure, potentially jam-resistant positioning and comms for critical applications. </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section py-28">
+            <div class="container mx-auto px-6 text-center">
+                <div class="max-w-3xl mx-auto fade-in-transform">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6"> Join Us in Building the <span class="gradient-text">Future</span> </h2>
+                    <p class="text-lg text-slate-300 mb-8"> We are seeking partners and investors to help realize the vision of a truly integrated space infrastructure. Let's connect and explore the possibilities. </p>
+                    <div class="flex justify-center"> <a href="mailto:raghavak@sanyark.com" class="cta-button"> <span>Contact Us</span> <i class="fas fa-envelope"></i> </a> </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-12 border-t border-slate-800/50 mt-16">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="flex items-center space-x-2"> <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center"> <i class="fas fa-satellite-dish text-white text-sm"></i> </div> <span class="text-lg font-semibold">SANYARK SPACE</span> </div>
+                    <div class="text-slate-400 text-sm"> <a href="mailto:raghavak@sanyark.com" class="hover:text-white transition-colors">raghavak@sanyark.com</a> </div>
+                    <div class="text-slate-500 text-sm text-center md:text-right"> © 2024 Sanyark Space. All rights reserved. </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            /**
+             * Creates constellation dots (Hero Section).
+             */
+            function createConstellationDots() {
+                const container = document.getElementById('constellation-dots');
+                if (!container) { console.error('Constellation dots container not found!'); return; }
+                const dotCount = 35; const fragment = document.createDocumentFragment();
+                for (let i = 0; i < dotCount; i++) {
+                    const dot = document.createElement('div'); dot.className = 'constellation-dot';
+                    dot.style.left = `${Math.random() * 100}%`; dot.style.top = `${Math.random() * 100}%`;
+                    const size = Math.random() * 2 + 0.5; dot.style.width = `${size}px`; dot.style.height = `${size}px`;
+                    const fadeInDelay = Math.random() * 1; const twinkleDuration = Math.random() * 4 + 3; const twinkleDelay = fadeInDelay + 1.5;
+                    dot.style.animationDelay = `${fadeInDelay}s, ${twinkleDelay}s`; dot.style.animationDuration = `1.5s, ${twinkleDuration}s`;
+                    fragment.appendChild(dot);
+                }
+                container.appendChild(fragment);
+            }
+
+            /**
+             * Sets up Intersection Observer to trigger animations when elements enter viewport.
+             */
+            function setupIntersectionObserver() {
+                const fadeElements = document.querySelectorAll('.fade-in, .fade-in-transform');
+                const missionSteps = document.querySelectorAll('.mission-step');
+                const techPillars = document.querySelectorAll('.tech-pillar');
+
+                const observerCallback = (entries, observer) => {
+                    entries.forEach(entry => {
+                        const delay = parseFloat(entry.target.style.getPropertyValue('--delay') || '0') * 1000;
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('visible');
+                                // Specific handling for mission steps visibility
+                                if (entry.target.classList.contains('mission-step')) {
+                                    animateMissionLine(); // Update line progress
+                                    entry.target.classList.add('visible'); // Ensure step itself is visible
+                                }
+                                // Specific handling for tech pillars visibility
+                                if (entry.target.classList.contains('tech-pillar')) {
+                                    entry.target.classList.add('visible');
+                                }
+                                // Unobserve general fade elements once visible
+                                if(!entry.target.classList.contains('mission-step') && !entry.target.classList.contains('tech-pillar')) {
+                                    observer.unobserve(entry.target);
+                                }
+                            }, delay);
+                        } else {
+                            // Optional: Reset animation if element scrolls out of view
+                            // if (entry.target.classList.contains('mission-step')) {
+                            //    entry.target.classList.remove('visible');
+                            // }
+                        }
+                    });
+                };
+
+                const observerOptions = { threshold: 0.2 }; // Trigger when 20% visible
+                const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+                fadeElements.forEach(element => { observer.observe(element); });
+                missionSteps.forEach(step => { observer.observe(step); }); // Observe each step
+                techPillars.forEach(pillar => { observer.observe(pillar); }); // Observe each pillar
+            }
+
+            /**
+             * Animates the vertical line in the Mission stepper based on visible steps.
+             */
+            function animateMissionLine() {
+                const stepper = document.querySelector('.mission-stepper');
+                const lineProgress = document.querySelector('.mission-stepper-line-progress');
+                const steps = Array.from(document.querySelectorAll('.mission-step'));
+                if (!stepper || !lineProgress || steps.length === 0) return;
+
+                let lastVisibleStep = null;
+                for (let i = steps.length - 1; i >= 0; i--) {
+                    if (steps[i].classList.contains('visible')) {
+                        lastVisibleStep = steps[i];
+                        break;
+                    }
+                }
+
+                if (lastVisibleStep) {
+                    const icon = lastVisibleStep.querySelector('.mission-step-icon');
+                    const stepperTop = stepper.getBoundingClientRect().top;
+                    const iconTop = icon.getBoundingClientRect().top;
+                    const iconCenterY = iconTop - stepperTop + (icon.offsetHeight / 2);
+                    // Calculate height from stepper top padding to the center of the last visible icon
+                    const lineHeight = iconCenterY - parseFloat(getComputedStyle(stepper).paddingTop); // Adjust based on actual top padding if needed
+                    lineProgress.style.height = `${Math.max(0, lineHeight)}px`;
+                } else {
+                    lineProgress.style.height = '0px'; // Reset if no steps are visible
+                }
+            }
+
+
+            /**
+             * Sets up smooth scrolling for anchor links.
+             */
+            function setupSmoothScroll() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault(); const targetId = this.getAttribute('href');
+                        if (!targetId || targetId === '#') return;
+                        try {
+                            const targetElement = document.querySelector(targetId);
+                            if(targetElement) {
+                                const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 60;
+                                const elementPosition = targetElement.getBoundingClientRect().top;
+                                const offsetPosition = window.pageYOffset + elementPosition - navbarHeight - 20;
+                                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                            } else { console.warn(`Smooth scroll target element not found: ${targetId}`); }
+                        } catch (error) { console.error(`Error finding smooth scroll target: ${targetId}`, error); }
+                    });
+                });
+            }
+
+            /**
+             * Adds interaction to technology diagram pillars.
+             */
+            function setupTechDiagramInteraction() {
+                const pillars = document.querySelectorAll('.tech-pillar');
+                pillars.forEach(pillar => {
+                    const icon = pillar.querySelector('.tech-pillar-icon');
+                    icon.addEventListener('mouseenter', () => {
+                        // Remove active class from others
+                        pillars.forEach(p => p.classList.remove('active'));
+                        // Add active class to this one
+                        pillar.classList.add('active');
+                    });
+                    // Optional: Deactivate on mouseleave from the pillar area
+                    // pillar.addEventListener('mouseleave', () => {
+                    //    pillar.classList.remove('active');
+                    // });
+                });
+                // Deactivate when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.tech-pillar')) {
+                        pillars.forEach(p => p.classList.remove('active'));
+                    }
+                });
+            }
+
+            /**
+             * Initializes and controls the Impact section carousel.
+             */
+            function setupImpactCarousel() {
+                const track = document.querySelector('.impact-carousel-track');
+                const slides = Array.from(track.children);
+                const nextButton = document.querySelector('.carousel-next');
+                const prevButton = document.querySelector('.carousel-prev');
+
+                if (!track || !nextButton || !prevButton || slides.length === 0) {
+                    console.warn("Carousel elements not found.");
+                    return; // Exit if elements are missing
+                }
+
+                const slideWidth = slides[0].getBoundingClientRect().width;
+                let currentIndex = 0;
+
+                // Arrange slides side by side
+                // Note: This assumes slides are direct children and track is flex container
+                // track.style.width = `${slideWidth * slides.length}px`; // Not needed if using flex: 0 0 100%
+
+                const moveToSlide = (targetIndex) => {
+                    // Clamp index within bounds
+                    if (targetIndex < 0) {
+                        targetIndex = slides.length - 1;
+                    } else if (targetIndex >= slides.length) {
+                        targetIndex = 0;
+                    }
+
+                    track.style.transform = `translateX(-${targetIndex * 100}%)`; // Use percentage for responsiveness
+                    currentIndex = targetIndex;
+                    updateNavButtons();
+                };
+
+                const updateNavButtons = () => {
+                    // Optional: Disable prev/next if not looping
+                    // prevButton.disabled = currentIndex === 0;
+                    // nextButton.disabled = currentIndex === slides.length - 1;
+                };
+
+
+                // Event Listeners
+                nextButton.addEventListener('click', () => {
+                    moveToSlide(currentIndex + 1);
+                });
+
+                prevButton.addEventListener('click', () => {
+                    moveToSlide(currentIndex - 1);
+                });
+
+                // Optional: Auto-play
+                let autoPlayInterval = null;
+                const startAutoPlay = (interval = 5000) => {
+                    stopAutoPlay(); // Clear existing interval
+                    autoPlayInterval = setInterval(() => {
+                        moveToSlide(currentIndex + 1);
+                    }, interval);
+                };
+
+                const stopAutoPlay = () => {
+                    clearInterval(autoPlayInterval);
+                };
+
+                // Start autoplay on load
+                startAutoPlay();
+
+                // Pause autoplay on hover
+                const container = document.querySelector('.impact-carousel-container');
+                if(container) {
+                    container.addEventListener('mouseenter', stopAutoPlay);
+                    container.addEventListener('mouseleave', startAutoPlay);
+                }
+
+
+                // Initial setup
+                updateNavButtons();
+
+                // Recalculate width on resize (important if slide width changes)
+                window.addEventListener('resize', () => {
+                    // Recalculate and move instantly without transition during resize
+                    const tempTransition = track.style.transition;
+                    track.style.transition = 'none';
+                    moveToSlide(currentIndex); // Re-apply transform based on new width
+                    // Restore transition after a short delay
+                    setTimeout(() => {
+                        track.style.transition = tempTransition;
+                    }, 50);
+                });
+            }
+
+
+            // --- Initialize Page ---
+            document.addEventListener('DOMContentLoaded', () => {
+                try {
+                    createConstellationDots();
+                    setupIntersectionObserver(); // Must run before animations depending on 'visible'
+                    setupSmoothScroll();
+                    setupTechDiagramInteraction();
+                    setupImpactCarousel();
+                } catch (error) {
+                    console.error("Error during page initialization:", error);
+                }
+                // Initial check for mission line animation in case steps are already visible on load
+                setTimeout(animateMissionLine, 100);
+            });
+        </script>
+    </body>
+    </html>
