@@ -3,29 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanyark Space | EO, PNT & Communications - The Future Fused</title>
+    <title>Sanyark Space | Fused PNT & Communications for an Autonomous World</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Import Google Font */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-        /* CSS Variables */
+        /* --- REDESIGN PRO MAX ULTRA v2: Color Palette & Core Variables --- */
         :root {
-            --primary: #3B82F6; /* Blue-500 */
+            --primary: #3B82F6; /* Blue-500: Core, Precision, PNT */
+            --primary-light: #60A5FA; /* Blue-400 */
             --primary-dark: #2563EB; /* Blue-600 */
-            --secondary: #8B5CF6; /* Violet-500 */
-            --tertiary: #10B981; /* Emerald-500 for EO accent */
+            --secondary: #8B5CF6; /* Violet-500: Connectivity, Comms */
+            --secondary-dark: #7C3AED; /* Violet-600 */
+            --highlight: #06B6D4; /* Cyan-500: Data, Synergy, Future */
+            --highlight-dark: #0891B2; /* Cyan-600 */
             --dark: #0F172A; /* Slate-900 */
-            --darker: #020617; /* Slate-950 */
+            --darker: #020617; /* Slate-950: Deep space */
             --light: #F8FAFC; /* Slate-50 */
-            --card-bg: rgba(15, 23, 42, 0.75); /* Slightly more opaque */
-            --card-border: rgba(51, 65, 85, 0.6);
-            --card-hover-border: rgba(59, 130, 246, 0.6);
-            --section-padding: theme('spacing.28'); /* py-28 */
+            --card-bg: rgba(15, 23, 42, 0.7); /* slate-900/70 */
+            --card-border: rgba(51, 65, 85, 0.5); /* slate-700/50 */
+            --card-hover-border: rgba(96, 165, 250, 0.6); /* blue-400/60 */
+            --section-padding-y: theme('spacing.28'); /* Increased padding py-28 */
+            --section-padding-y-lg: theme('spacing.40'); /* Increased padding lg:py-40 */
         }
 
-        /* Base body styling */
+        /* --- Base & Typography --- */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--darker);
@@ -34,973 +38,648 @@
             -webkit-font-smoothing: antialiased;
             scroll-behavior: smooth;
         }
+        .ultrapad{
+            padding-top:20px;
+        }
 
-        /* Navbar */
-        .navbar { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background-color: rgba(2, 6, 23, 0.9); }
+        /* --- Gradient & Highlight Text --- */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .highlight-text { color: var(--highlight); }
 
-        /* General section styling */
-        .section { position: relative; overflow: hidden; padding-top: var(--section-padding); padding-bottom: var(--section-padding); }
-        .section-alt-bg { background-color: rgba(15, 23, 42, 0.35); /* bg-slate-900/35 */ }
-        .section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.07) 0%, transparent 75%); pointer-events: none; }
-
-        /* Gradient text utility */
-        .gradient-text { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .gradient-text-eo { background: linear-gradient(90deg, var(--primary), var(--tertiary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-
-
-        /* Fade-in setup */
-        .fade-in { opacity: 0; transition: opacity 0.7s ease-out; }
+        /* --- Animations & Transitions --- */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.215, 0.610, 0.355, 1), transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1.2s ease-out;
+        }
         .fade-in.visible { opacity: 1; }
-        .fade-in-transform { opacity: 0; transform: translateY(25px); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
-        .fade-in-transform.visible { opacity: 1; transform: translateY(0); }
 
-        /* Custom scrollbar */
+        /* --- Scrollbar --- */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--darker); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
 
-        /* --- Hero Section Styles (Mostly unchanged) --- */
-        @keyframes orbit { 0% { transform: rotate(0deg) translateX(150px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(150px) rotate(-360deg); } }
-        .satellite { width: 24px; height: 8px; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px; position: absolute; box-shadow: 0 0 12px rgba(59, 130, 246, 0.7); }
-        .satellite::after { content: ''; position: absolute; right: -4px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 8px white; }
-        .constellation-dot { position: absolute; background: white; border-radius: 50%; box-shadow: 0 0 5px white; opacity: 0; animation: fadeInDot 1.5s ease-out forwards, twinkle 5s ease-in-out infinite; }
-        @keyframes fadeInDot { to { opacity: 0.7; } }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
-        @keyframes float { 0% { transform: translate(-50%, -50%) translateY(0px); } 50% { transform: translate(-50%, -50%) translateY(-12px); } 100% { transform: translate(-50%, -50%) translateY(0px); } }
-        .floating { animation: float 8s ease-in-out infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
-        .pulse { animation: pulse 2s infinite; }
-        @keyframes dataStream { 0% { transform: translateY(-100%); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(100%); opacity: 0; } }
-        .data-stream { position: absolute; width: 2px; height: 20px; background: linear-gradient(to bottom, transparent, var(--primary), transparent); animation: dataStream 1.5s linear infinite; }
-
-        /* --- Integrated Capabilities Section Styles (Formerly PNT+COMMS) --- */
-        .grid-pattern { background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
-        @keyframes slowRotate { from { transform: translate(-50%, -50%) rotate(15deg); } to { transform: translate(-50%, -50%) rotate(375deg); } }
-        @keyframes pulseScale { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-        @keyframes pulseOpacity { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-        .comms-central-satellite { position: absolute; top: 50%; left: 50%; animation: slowRotate 25s linear infinite; }
-        .comms-connected-satellite { position: absolute; width: 64px; height: 32px; background-color: rgba(59, 130, 246, 0.2); border-radius: 9999px; display: flex; align-items: center; justify-content: center; animation: pulseScale 3.5s ease-in-out infinite; }
-        .comms-connected-satellite-inner { width: 48px; height: 16px; background: linear-gradient(to right, var(--primary), var(--secondary)); border-radius: 9999px; }
-        .comms-connection-line { stroke: url(#gradient); stroke-width: 1; stroke-dasharray: 4 2; animation: pulseOpacity 3.5s ease-in-out infinite; }
-
-        /* --- Mission Section Styling (Vertical Stepper) --- */
-        .mission-stepper {
-            position: relative;
-            max-width: 40rem; /* max-w-xl, slightly wider for potentially more text */
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 2.5rem; /* Add padding for the line and larger icons */
+        /* --- Navbar --- */
+        .navbar {
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            background-color: rgba(2, 6, 23, 0.85);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
         }
-        .mission-stepper::before {
+
+        /* --- Section Styling --- */
+        .section {
+            position: relative;
+            overflow: hidden;
+            padding-top: var(--section-padding-y); padding-bottom: var(--section-padding-y);
+        }
+        .section-alt-bg { background-color: rgba(15, 23, 42, 0.25); }
+        .grid-pattern {
+            position: relative;
+            background-image:
+                linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .section-glow::before {
             content: '';
             position: absolute;
-            left: 0.25rem; /* Adjusted for icon centering */
-            top: 1rem;
-            bottom: 1rem;
-            width: 4px; /* Slightly thicker line */
-            background-color: var(--card-border);
-            border-radius: 2px;
-        }
-        .mission-stepper-line-progress {
-            position: absolute;
-            left: 0.25rem; /* Adjusted for icon centering */
-            top: 1rem;
-            width: 4px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--tertiary)); /* Added EO color */
-            border-radius: 2px;
-            height: 0;
-            transition: height 0.5s ease-out;
-        }
-        .mission-step {
-            position: relative;
-            margin-bottom: 4rem;
-            padding-left: 2.5rem; /* Space for icon */
-            opacity: 0;
-            transform: translateX(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .fade-in.visible .mission-step {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        .mission-step:last-child { margin-bottom: 0; }
-        .mission-step-icon {
-            position: absolute;
-            left: -1.75rem; /* Position over the line ( (3rem icon + 0.5rem padding) / 2 ) - 0.25rem line offset */
-            top: 0rem; /* Align with top of content */
-            width: 3.5rem; /* w-14 */
-            height: 3.5rem; /* h-14 */
-            border-radius: 9999px;
-            background-color: var(--darker);
-            border: 3px solid var(--primary); /* Default to primary, can be overridden */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem; /* text-2xl */
-            z-index: 1;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .mission-step.visible .mission-step-icon {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px var(--primary-dark);
-        }
-        .mission-step-icon.icon-eo { border-color: var(--tertiary); color: var(--tertiary); }
-        .mission-step.visible .mission-step-icon.icon-eo { box-shadow: 0 0 15px var(--tertiary); }
-
-        .mission-step-content {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 0.75rem; /* rounded-xl */
-            padding: 1.5rem; /* p-6 */
-            transition: border-color 0.3s ease;
-        }
-         .mission-step.visible .mission-step-content:hover {
-            border-color: var(--card-hover-border);
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 100%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-
-        /* --- Technology Section Styling (Interactive Diagram - 4 Pillars) --- */
-        .tech-diagram {
-            position: relative;
-            width: 100%;
-            max-width: 52rem; /* Increased max-width for 4 pillars */
-            margin: 3rem auto;
-            aspect-ratio: 1 / 1; /* Square for better 4-pillar distribution */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .tech-diagram-center {
-            width: 9rem; /* w-36 */
-            height: 9rem; /* h-36 */
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.35) 0%, rgba(15, 23, 42, 0.6) 70%);
-            display: flex;
-            flex-direction: column; /* Stack icon and text */
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.35);
-            text-align: center;
-        }
-        .tech-diagram-center i {
-            font-size: 3rem; /* text-5xl */
-            color: var(--primary);
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
-        }
-        .tech-diagram-center span {
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 500;
-            color: var(--light);
-        }
-        .tech-pillar {
-            position: absolute;
-            width: 11rem; /* Adjust size as needed */
-            text-align: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            z-index: 2; /* Ensure pillars are above lines */
-        }
-        .fade-in.visible .tech-pillar {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .tech-pillar-icon {
-            width: 4.5rem; /* w-18 */
-            height: 4.5rem; /* h-18 */
-            border-radius: 50%;
-            background-color: var(--card-bg);
-            border: 2px solid var(--primary); /* Default border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem auto;
-            font-size: 1.75rem; /* text-3xl */
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .tech-pillar-icon.icon-eo-tech { border-color: var(--tertiary); color: var(--tertiary); }
-        .tech-pillar-icon:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        }
-        .tech-pillar-icon.icon-eo-tech:hover { box-shadow: 0 0 15px var(--tertiary); }
-
-        .tech-pillar h3 {
-            font-size: 1.125rem; /* text-lg */
-            font-weight: 600; /* font-semibold */
-            margin-bottom: 0.5rem;
-        }
-        .tech-pillar p {
-            font-size: 0.875rem; /* text-sm */
-            color: #94a3b8; /* text-slate-400 */
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.5s ease-out, opacity 0.5s ease-out 0.1s;
-        }
-        .tech-pillar.active p {
-            max-height: 120px; /* Adjust as needed */
-            opacity: 1;
-        }
-
-        /* Positioning the 4 pillars (N, E, S, W of center) */
-        /* Distances are from the center of the diagram to the center of the pillar icon */
-        .tech-pillar-1 { top: 0; left: 50%; transform: translate(-50%, -50%) scale(0.8); margin-top: -6rem; } /* Top */
-        .tech-pillar-2 { top: 50%; right: 0; transform: translate(50%, -50%) scale(0.8); margin-right: -6rem; } /* Right */
-        .tech-pillar-3 { bottom: 0; left: 50%; transform: translate(-50%, 50%) scale(0.8); margin-bottom: -6rem; } /* Bottom */
-        .tech-pillar-4 { top: 50%; left: 0; transform: translate(-50%, -50%) scale(0.8); margin-left: -6rem; } /* Left */
-
-        .fade-in.visible .tech-pillar-1 { transform: translate(-50%, -50%) scale(1); }
-        .fade-in.visible .tech-pillar-2 { transform: translate(50%, -50%) scale(1); }
-        .fade-in.visible .tech-pillar-3 { transform: translate(-50%, 50%) scale(1); }
-        .fade-in.visible .tech-pillar-4 { transform: translate(-50%, -50%) scale(1); }
-
-
-        /* Lines connecting center to pillars (SVG for better control) */
-        .tech-diagram-lines {
+        /* --- HERO SECTION --- */
+        #hero-canvas {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 0; /* Behind center and pillars */
-            pointer-events: none; /* Allow clicks to pass through */
+            z-index: 1;
         }
-        .tech-diagram-lines line {
-            stroke-width: 2px;
-            stroke-dasharray: 4 3;
+        .hero-content { position: relative; z-index: 2; }
+
+        /* --- CAPABILITIES SECTION --- */
+        .capability-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem; /* rounded-2xl */
+            padding: 2.5rem; /* p-10 */
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .capability-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--card-hover-border);
+            box-shadow: 0 15px 35px rgba(2, 6, 23, 0.6);
+        }
+        .capability-icon {
+            width: 4rem; height: 4rem; /* w-16 h-16 */
+            border-radius: 0.75rem; /* rounded-xl */
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 2rem; /* mb-8 */
+            font-size: 1.75rem; /* text-3xl */
+            transition: all 0.3s ease;
+        }
+        .capability-card:hover .capability-icon { transform: scale(1.1) rotate(-5deg); }
+        .pnt-icon { background: rgba(59, 130, 246, 0.1); color: var(--primary-light); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+        .comms-icon { background: rgba(139, 92, 246, 0.1); color: var(--secondary); box-shadow: 0 0 20px rgba(139, 92, 246, 0.1); }
+        .platform-icon { background: rgba(6, 182, 212, 0.1); color: var(--highlight); box-shadow: 0 0 20px rgba(6, 182, 212, 0.1); }
+
+
+        /* --- NEW TECHNOLOGY SECTION --- */
+        .tech-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            lg:grid-template-columns: 2fr 3fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .tech-pills {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .tech-pill {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem; /* rounded-xl */
+            border: 1px solid var(--card-border);
+            background: transparent;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            text-align: left;
+        }
+        .tech-pill:hover, .tech-pill.active {
+            background-color: var(--card-bg);
+            border-color: var(--card-hover-border);
+        }
+        .tech-pill-icon {
+            font-size: 1.5rem;
+            width: 2.5rem;
+            flex-shrink: 0;
+            transition: color 0.3s ease;
+        }
+        .tech-pill.active .tech-pill-icon {
+            color: var(--highlight);
+        }
+
+        .tech-content-area {
+            position: relative;
+            min-height: 450px;
+            background-color: rgba(15, 23, 42, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .tech-content {
+            position: absolute;
+            inset: 2.5rem;
             opacity: 0;
-            transition: opacity 0.5s ease-out 0.3s; /* Fade in after pillars */
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
         }
-        .fade-in.visible .tech-diagram-lines line {
-            opacity: 0.4;
+        .tech-content.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
-        .tech-diagram-lines .line-pnt { stroke: var(--primary); }
-        .tech-diagram-lines .line-comms { stroke: var(--secondary); }
-        .tech-diagram-lines .line-eo { stroke: var(--tertiary); }
-        .tech-diagram-lines .line-network { stroke: #A5B4FC; } /* A lighter violet/blue for network */
 
-
-        /* --- Impact Section Styling --- */
+        /* --- IMPACT SECTION --- */
         .impact-card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 1rem; /* rounded-2xl */
-            padding: 2rem; /* p-8 */
-            text-align: center;
+            border-radius: 1rem;
+            padding: 2.5rem 1.5rem; text-align: center;
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0; /* Start hidden for animation */
-            transform: scale(0.95); /* Start slightly smaller */
-            display: flex; /* For vertical alignment */
-            flex-direction: column; /* Stack content vertically */
-            justify-content: flex-start; /* Align items to the top */
-        }
-         .fade-in.visible .impact-card {
-            opacity: 1;
-            transform: scale(1);
-            transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease; /* Added bounce */
         }
         .impact-card:hover {
-            transform: scale(1.03); /* Zoom in on hover */
+            transform: translateY(-10px);
             border-color: var(--card-hover-border);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .impact-icon-container {
-            width: 4rem; /* w-16 */
-            height: 4rem; /* h-16 */
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: rgba(59, 130, 246, 0.1); /* bg-primary/10 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem; /* mb-6 */
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 1.5rem; /* text-2xl */
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease; /* Add transition for hover effect */
-            color: var(--primary); /* Default color */
+        .impact-icon {
+            font-size: 3rem; /* text-5xl */
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .impact-card:hover .impact-icon-container {
-             transform: scale(1.1); /* Scale icon container on card hover */
+        .impact-card:hover .impact-icon { transform: scale(1.2) rotate(-5deg); }
+        .impact-icon-pnt { color: var(--primary); }
+        .impact-icon-comms { color: var(--secondary); }
+        .impact-icon-fused {
+             background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .impact-icon-container.icon-eo-impact { background-color: rgba(16, 185, 129, 0.1); color: var(--tertiary); }
 
-
-        /* Individual Impact Icon Animations */
-        @keyframes flyPlane { 0%, 100% { transform: translateX(0) translateY(0) rotate(-5deg); } 50% { transform: translateX(3px) translateY(-2px) rotate(0deg); } }
-        .icon-plane i { animation: flyPlane 3s ease-in-out infinite; }
-
-        @keyframes rockShip { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
-        .icon-ship i { animation: rockShip 4s ease-in-out infinite; }
-
-        @keyframes pulseTower { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; transform: scale(1.05); } }
-        .icon-tower i { animation: pulseTower 2s ease-in-out infinite; }
-
-        @keyframes growPlant { 0%, 100% { transform: scale(1) rotate(-3deg); } 50% { transform: scale(1.1) rotate(3deg); } }
-        .icon-plant i { animation: growPlant 3.5s ease-in-out infinite; }
-
-        @keyframes spinCog { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .icon-cogs i { animation: spinCog 8s linear infinite; }
-
-        @keyframes shieldPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.3); } 70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); } }
-        .icon-shield .fa-user-shield { animation: shieldPulse 2.5s infinite; border-radius: 50%; }
-
-        @keyframes globeSpin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
-        .icon-globe-spin i { animation: globeSpin 15s linear infinite; }
-
-
-        /* --- Carousel (Impact Section) --- */
-        .impact-carousel-container { position: relative; width: 100%; overflow: hidden; }
-        .impact-carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
-        .impact-slide {
-            flex: 0 0 100%; width: 100%; min-height: 450px; position: relative;
-            display: flex; align-items: center; justify-content: center; text-align: center;
-            padding: 3rem; border-radius: 1rem; overflow: hidden;
-            opacity: 0; transform: scale(0.9); transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        /* --- CTA BUTTON --- */
+        .cta-button {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 1rem 2.5rem;
+            background-image: linear-gradient(to right, var(--primary) 0%, var(--secondary) 50%, var(--primary) 100%);
+            background-size: 200% auto;
+            border-radius: 9999px; font-weight: 600; /* semibold */
+            color: white;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 20px rgba(139, 92, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.2);
         }
-        .fade-in.visible .impact-slide { opacity: 1; transform: scale(1); }
-        .impact-slide::before {
-            content: ''; position: absolute; inset: 0; z-index: 0;
-            background-size: cover; background-position: center; opacity: 0.15;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+        .cta-button:hover {
+            background-position: right center; /* change the direction of the change here */
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 0 30px rgba(139, 92, 246, 0.3), 0 0 30px rgba(59, 130, 246, 0.3);
         }
-        .impact-slide:hover::before { opacity: 0.25; transform: scale(1.05); }
-
-        /* Placeholder images updated with EO themes */
-        .impact-slide-1::before { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://placehold.co/1200x600/020617/3B82F6?text=Global+Situational+Awareness'); }
-        .impact-slide-2::before { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://placehold.co/1200x600/020617/8B5CF6?text=Smart+Logistics+%26+Maritime'); }
-        .impact-slide-3::before { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://placehold.co/1200x600/020617/10B981?text=Environmental+Intelligence'); }
-        .impact-slide-4::before { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://placehold.co/1200x600/020617/F59E0B?text=Resilient+Infrastructure'); }
-        .impact-slide-5::before { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://placehold.co/1200x600/020617/EC4899?text=Next-Gen+IoT+%26+Robotics'); }
-        .impact-slide-6::before { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://placehold.co/1200x600/020617/EF4444?text=Enhanced+Security+%26+Defense'); }
-
-
-        .impact-slide-content {
-            position: relative; z-index: 1; max-width: 600px;
-            background: rgba(2, 6, 23, 0.65); padding: 2rem; border-radius: 0.75rem; backdrop-filter: blur(6px);
-        }
-        .impact-slide-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
-        .impact-slide-icon.icon-eo-slide { color: var(--tertiary); }
-        .impact-slide h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.75rem; }
-        .impact-slide p { color: #cbd5e1; }
-
-        .carousel-nav {
-            position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
-            background-color: rgba(15, 23, 42, 0.7); color: var(--light);
-            border: 1px solid var(--card-border); border-radius: 50%;
-            width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .carousel-nav:hover { background-color: rgba(59, 130, 246, 0.5); transform: translateY(-50%) scale(1.1); }
-        .carousel-prev { left: 1rem; }
-        .carousel-next { right: 1rem; }
-
-        /* --- CTA Button Styling --- */
-        .cta-button { display: inline-flex; align-items: center; justify-content: center; padding: 0.85rem 1.75rem; background-image: linear-gradient(to right, var(--primary), var(--secondary)); border-radius: 9999px; font-weight: 500; color: white; transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2); }
-        .cta-button:hover { opacity: 0.9; transform: scale(1.03); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3); }
-        .cta-button i { margin-left: 0.5rem; font-size: 0.85rem; }
+        .cta-button i { margin-left: 0.75rem; transition: transform 0.3s ease; }
+        .cta-button:hover i { transform: translateX(5px); }
 
     </style>
 </head>
 <body class="antialiased">
-    <nav class="navbar fixed w-full z-50">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-xl font-semibold"><b>Sanyark Space</b></span>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#mission" class="text-slate-300 hover:text-white transition-colors duration-300">Mission</a>
-                    <a href="#capabilities" class="text-slate-300 hover:text-white transition-colors duration-300">Capabilities</a>
-                    <a href="#technology" class="text-slate-300 hover:text-white transition-colors duration-300">Technology</a>
-                    <a href="#impact" class="text-slate-300 hover:text-white transition-colors duration-300">Impact</a>
-                    <a href="mailto:raghavak@sanyark.com" class="text-slate-300 hover:text-white transition-colors duration-300">Contact</a>
-                </div>
-                <div class="md:hidden">
-                    <a href="mailto:raghavak@sanyark.com" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary rounded-full text-sm font-medium hover:opacity-90 transition-opacity">Contact</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <section class="section min-h-screen flex items-center pt-28 md:pt-24">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col lg:flex-row items-center">
-                <div class="lg:w-1/2 mb-16 lg:mb-0 fade-in-transform text-center lg:text-left">
-                    <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
-                        Unified Vision: <br class="hidden md:block"> <span class="gradient-text-eo">EO</span> + <span class="gradient-text">PNT</span> + <span class="gradient-text">Comms</span>
-                    </h1>
-                    <p class="text-lg text-slate-300 mb-8 max-w-xl mx-auto lg:mx-0">
-                        Sanyark Space is pioneering the next frontier of space infrastructure, delivering integrated Earth Observation, precise positioning, and high-speed data links from a unified LEO constellation.
-                    </p>
-                    <div class="flex justify-center lg:justify-start">
-                        <a href="mailto:raghavak@sanyark.com" class="cta-button">
-                            <span>Explore Synergy</span> <i class="fas fa-arrow-right"></i>
+    <!-- ========== HEADER ========== -->
+    <header class="navbar fixed top-0 left-0 w-full z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-3">
+                <i class="fas fa-satellite-dish text-2xl highlight-text"></i>
+                <span class="text-xl font-bold tracking-wider">SANYARK</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#capabilities" class="text-slate-300 hover:text-white transition-colors duration-300">Capabilities</a>
+                <a href="#technology" class="text-slate-300 hover:text-white transition-colors duration-300">Technology</a>
+                <a href="#impact" class="text-slate-300 hover:text-white transition-colors duration-300">Impact</a>
+                <a href="#contact" class="text-slate-300 hover:text-white transition-colors duration-300">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <a href="#contact" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary rounded-full text-sm font-medium hover:opacity-90 transition-opacity">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ========== HERO SECTION ========== -->
+        <section class="section relative min-h-screen flex items-center justify-center text-center">
+            <canvas id="hero-canvas"></canvas>
+            <div class="hero-content container mx-auto px-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="fade-in-up">
+                        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
+                            Assured Positioning.<br>Seamless <span class="gradient-text">Connectivity</span>.
+                        </h1>
+                        <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
+                            Sanyark is building the essential space backbone for a secure and autonomous world, delivering fused PNT and Communications from a unified LEO constellation.
+                        </p>
+                        <a href="#contact" class="cta-button">
+                            <span>Build The Future</span>
+                            <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-                <div class="lg:w-1/2 relative fade-in" style="animation-delay: 0.2s;">
-                    <div class="relative" style="height: 500px;">
-                        <div class="absolute top-1/2 left-1/2 w-64 h-64 rounded-full bg-gradient-to-br from-blue-900 via-slate-800 to-emerald-900 shadow-xl flex items-center justify-center floating">
-                            <div class="w-48 h-48 rounded-full bg-gradient-to-br from-blue-800 via-slate-700 to-emerald-800 flex items-center justify-center">
-                                <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-700 via-slate-600 to-emerald-700 flex items-center justify-center">
-                                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary via-secondary to-tertiary pulse"></div>
-                                </div>
-                            </div>
-                            <div class="data-stream" style="left: 20%; animation-delay: 0.2s;"></div>
-                            <div class="data-stream" style="left: 30%; animation-delay: 0.4s; background: linear-gradient(to bottom, transparent, var(--tertiary), transparent);"></div>
-                            <div class="data-stream" style="left: 70%; animation-delay: 0.6s;"></div>
-                            <div class="data-stream" style="left: 80%; animation-delay: 0.8s; background: linear-gradient(to bottom, transparent, var(--secondary), transparent);"></div>
+            </div>
+        </section>
+
+        <!-- ========== CAPABILITIES SECTION ========== -->
+        <section id="capabilities" class="section section-alt-bg grid-pattern section-glow" style="padding:7em;">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-3xl mx-auto text-center mb-20">
+                    <div class="fade-in-up">
+                        <h2 class="text-4xl md:text-5xl font-bold mb-4">The Power of <span class="gradient-text">Fusion</span></h2>
+                        <p class="text-lg text-slate-400">Our LEO satellites are uniquely engineered to concurrently provide resilient PNT signals and secure, mid-bandwidth data links, creating a sum far greater than its parts.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="capability-card fade-in-up" style="--delay: 100ms;">
+                        <div class="capability-icon pnt-icon">
+                            <i class="fas fa-location-crosshairs"></i>
                         </div>
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <div class="satellite" style="animation: orbit 12s linear infinite;">
-                                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-1 h-8 bg-primary/50 rounded-full"></div>
-                            </div>
+                        <h3 class="text-2xl font-semibold mb-3">Precision PNT</h3>
+                        <p class="text-slate-400">Centimeter-level, high-integrity positioning and timing signals, resistant to jamming and spoofing, for critical navigation and synchronization needs.</p>
+                    </div>
+                    <div class="capability-card fade-in-up" style="--delay: 200ms;">
+                        <div class="capability-icon comms-icon">
+                            <i class="fas fa-wifi"></i>
                         </div>
-                        <div id="constellation-dots" class="absolute inset-0"></div>
+                        <h3 class="text-2xl font-semibold mb-3">Secure Communications</h3>
+                        <p class="text-slate-400">Reliable, low-latency data links optimized for M2M and IoT applications. We provide the crucial mid-bandwidth connectivity others overlook.</p>
+                    </div>
+                    <div class="capability-card fade-in-up md:col-span-2 lg:col-span-1" style="--delay: 300ms;">
+                        <div class="capability-icon platform-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">Unified Platform</h3>
+                        <p class="text-slate-400">A single, SWaP-optimized user terminal provides access to both services, reducing complexity, cost, and power consumption for any application.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="capabilities" class="section section-alt-bg grid-pattern mt-10 mb-10 pt-16 pb-16 md:pt-20 md:pb-20">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                <div class="lg:w-1/2 fade-in-transform">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-8">
-                        A <span class="gradient-text">Synergistic</span> Triad
-                    </h2>
+        <!-- ========== NEW, INTERACTIVE TECHNOLOGY SECTION ========== -->
+        <section id="technology" class="section" style="padding:7em;">
+            <div class="container mx-auto px-6">
+                <div class="max-w-3xl mx-auto text-center mb-20">
+                     <div class="fade-in-up">
+                        <h2 class="text-4xl md:text-5xl font-bold mb-4">The <span class="gradient-text">Sanyark</span> Stack</h2>
+                        <p class="text-lg text-slate-400">Our innovation is driven by a deeply integrated stack of advanced technologies, designed for performance, resilience, and scalability.</p>
+                    </div>
+                </div>
+
+                <div class="lg:grid lg:grid-cols-5 lg:gap-12 items-start">
+                    <!-- Pills for navigation -->
+                    <div class="tech-pills lg:col-span-2 fade-in-up mb-12 lg:mb-0">
+                        <button class="tech-pill active" data-target="tech-sdr">
+                            <i class="tech-pill-icon fas fa-wave-square"></i>
+                            <div>
+                                <h4 class="font-semibold text-lg">Software-Defined Radios (SDR)</h4>
+                                <p class="text-sm text-slate-400">For dynamic waveform and signal processing.</p>
+                            </div>
+                        </button>
+                         <button class="tech-pill" data-target="tech-phased-array">
+                            <i class="tech-pill-icon fas fa-border-all"></i>
+                            <div>
+                                <h4 class="font-semibold text-lg">Phased Array Antennas</h4>
+                                <p class="text-sm text-slate-400">Electronically steerable, multi-beam antennas.</p>
+                            </div>
+                        </button>
+                        <button class="tech-pill" data-target="tech-beamforming">
+                            <i class="tech-pill-icon fas fa-bullseye"></i>
+                             <div>
+                                <h4 class="font-semibold text-lg">Advanced Beamforming</h4>
+                                <p class="text-sm text-slate-400">Precision signal shaping and targeting.</p>
+                            </div>
+                        </button>
+                        <button class="tech-pill" data-target="tech-isl">
+                            <i class="tech-pill-icon fas fa-project-diagram"></i>
+                             <div>
+                                <h4 class="font-semibold text-lg">Inter-Satellite Links (ISL)</h4>
+                                <p class="text-sm text-slate-400">For a resilient, low-latency mesh network.</p>
+                            </div>
+                        </button>
+                        <button class="tech-pill" data-target="tech-edge-ai">
+                            <i class="tech-pill-icon fas fa-brain"></i>
+                             <div>
+                                <h4 class="font-semibold text-lg">On-board Edge AI</h4>
+                                <p class="text-sm text-slate-400">Intelligent, real-time data processing.</p>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <!-- Content Display Area -->
+                    <div class="tech-content-area lg:col-span-3 fade-in" style="--delay: 200ms;">
+                        <div id="tech-sdr" class="tech-content active">
+                            <h3 class="text-3xl font-bold mb-4 highlight-text">Software-Defined Agility</h3>
+                            <p class="text-lg text-slate-300 mb-6">Our satellites are built on a foundation of Software-Defined Radios, allowing us to dynamically update and reconfigure payloads in orbit. This means we can adapt to new threats, deploy new services, and optimize signal performance on the fly, ensuring a future-proof and resilient constellation.</p>
+                            <ul class="space-y-3 text-slate-400">
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>In-orbit payload reconfiguration.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Support for multiple, custom waveforms.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Enhanced resilience against electronic warfare.</span></li>
+                            </ul>
+                        </div>
+                         <div id="tech-phased-array" class="tech-content">
+                            <h3 class="text-3xl font-bold mb-4 highlight-text">Multi-Beam Precision</h3>
+                            <p class="text-lg text-slate-300 mb-6">Phased array antennas form the heart of our service delivery, enabling us to generate and steer multiple beams simultaneously from a single satellite. This technology allows for precise geographic coverage, efficient use of power, and the ability to serve many users and applications at once.</p>
+                             <ul class="space-y-3 text-slate-400">
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Serve multiple regions and users concurrently.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>No moving parts for higher reliability.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Rapid, electronic beam steering.</span></li>
+                            </ul>
+                        </div>
+                        <div id="tech-beamforming" class="tech-content">
+                            <h3 class="text-3xl font-bold mb-4 highlight-text">Intelligent Signal Shaping</h3>
+                            <p class="text-lg text-slate-300 mb-6">Advanced digital beamforming gives us unparalleled control over our PNT and Comms signals. We can shape beams to maximize signal strength for users, create nulls to mitigate interference and jamming, and ensure our services are delivered with the highest integrity and security, even in contested environments.</p>
+                             <ul class="space-y-3 text-slate-400">
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Anti-jam and anti-spoofing capabilities.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Power optimization for extended satellite life.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>High-gain beams for difficult environments.</span></li>
+                            </ul>
+                        </div>
+                        <div id="tech-isl" class="tech-content">
+                            <h3 class="text-3xl font-bold mb-4 highlight-text">A Web in the Sky</h3>
+                            <p class="text-lg text-slate-300 mb-6">Our constellation is interconnected with high-capacity Inter-Satellite Links, forming a resilient mesh network in space. This reduces reliance on ground stations, lowers latency for data transfer, and allows for rapid command, control, and synchronization across the entire fleet, ensuring seamless global service.</p>
+                             <ul class="space-y-3 text-slate-400">
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Ultra-low latency communication pathways.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Reduced dependence on ground infrastructure.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Self-healing, resilient network topology.</span></li>
+                            </ul>
+                        </div>
+                        <div id="tech-edge-ai" class="tech-content">
+                            <h3 class="text-3xl font-bold mb-4 highlight-text">Intelligence in Orbit</h3>
+                            <p class="text-lg text-slate-300 mb-6">By embedding AI and machine learning processors directly onto our satellites, we enable real-time, on-board data analysis and decision-making. This allows for autonomous network management, intelligent resource allocation, and processing data at the source, delivering insights faster than ever before.</p>
+                             <ul class="space-y-3 text-slate-400">
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Autonomous satellite and network operations.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>Real-time signal quality monitoring and optimization.</span></li>
+                                <li class="flex items-center gap-3"><i class="fas fa-check-circle text-primary"></i><span>On-board data filtering to reduce backhaul needs.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========== IMPACT SECTION ========== -->
+        <section id="impact" class="section section-alt-bg grid-pattern section-glow" style="padding:7em;">
+            <div class="container mx-auto px-6 relative z-10">
+                 <div class="max-w-3xl mx-auto text-center mb-20">
+                    <div class="fade-in-up">
+                        <h2 class="text-6xl md:text-6xl font-bold mb-6">Empowering the <span class="gradient-text">Autonomous</span> Future</h2>
+                        <p class="text-lg text-slate-400">Our fused service is the catalyst for the next generation of technology across critical industries.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <div class="impact-card fade-in-up" style="--delay: 50ms;">
+                        <i class="fas fa-robot impact-icon impact-icon-fused"></i>
+                        <h3 class="text-xl font-semibold mb-2">Autonomous Systems</h3>
+                        <p class="text-slate-400 text-sm">High-trust positioning and real-time data for drones, vehicles, and robotics.</p>
+                    </div>
+                    <div class="impact-card fade-in-up" style="--delay: 100ms;">
+                        <i class="fas fa-ship impact-icon impact-icon-pnt"></i>
+                        <h3 class="text-xl font-semibold mb-2">Maritime & Logistics</h3>
+                        <p class="text-slate-400 text-sm">Precise asset tracking and continuous connectivity for global supply chains.</p>
+                    </div>
+                    <div class="impact-card fade-in-up" style="--delay: 150ms;">
+                        <i class="fas fa-user-shield impact-icon impact-icon-fused"></i>
+                        <h3 class="text-xl font-semibold mb-2">Defense & Sovereign</h3>
+                        <p class="text-slate-400 text-sm">Secure, jam-resistant PNT and robust communications for critical applications.</p>
+                    </div>
+                    <div class="impact-card fade-in-up" style="--delay: 200ms;">
+                        <i class="fas fa-city impact-icon impact-icon-comms"></i>
+                        <h3 class="text-xl font-semibold mb-2">Smart Infrastructure</h3>
+                        <p class="text-slate-400 text-sm">Synchronized operations and real-time monitoring for utilities and smart cities.</p>
+                    </div>
+                     <div class="impact-card fade-in-up" style="--delay: 250ms;">
+                        <i class="fas fa-car-on impact-icon impact-icon-pnt"></i>
+                        <h3 class="text-xl font-semibold mb-2">Automotive (V2X)</h3>
+                        <p class="text-slate-400 text-sm">Enabling the future of vehicle-to-everything communication with reliable data links.</p>
+                    </div>
+                    <div class="impact-card fade-in-up" style="--delay: 300ms;">
+                        <i class="fas fa-tower-broadcast impact-icon impact-icon-comms"></i>
+                        <h3 class="text-xl font-semibold mb-2">Telecom Backhaul</h3>
+                        <p class="text-slate-400 text-sm">Critical timing and data backhaul for 5G/6G networks in remote areas.</p>
+                    </div>
+                    <div class="impact-card fade-in-up" style="--delay: 350ms;">
+                        <i class="fas fa-house-chimney-crack impact-icon impact-icon-fused"></i>
+                        <h3 class="text-xl font-semibold mb-2">Disaster Response</h3>
+                        <p class="text-slate-400 text-sm">Resilient PNT/Comms for first responders when terrestrial systems fail.</p>
+                    </div>
+                    <div class="impact-card fade-in-up" style="--delay: 400ms;">
+                        <i class="fas fa-industry impact-icon impact-icon-pnt"></i>
+                        <h3 class="text-xl font-semibold mb-2">Industrial IoT</h3>
+                        <p class="text-slate-400 text-sm">Connecting and locating millions of devices for large-scale industrial automation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CTA SECTION ========== -->
+        <section id="contact" class="section" style="padding-top:7em;">
+            <div class="container mx-auto px-6 text-center">
+                <div class="max-w-3xl mx-auto fade-in-up">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Build the <span class="gradient-text">Backbone</span><br> of Tomorrow.</h2>
                     <p class="text-lg text-slate-300 mb-10">
-                        Our LEO satellites are engineered to concurrently provide Earth Observation data, precise PNT signals, and high-speed communication links, revolutionizing space-based services with unprecedented efficiency.
+                        We are seeking visionary partners, customers, and talent to realize the full potential of fused PNT and Communications. Connect with us to build the next generation of space infrastructure together.
                     </p>
-                    <div class="space-y-8">
-                        <div class="flex items-start">
-                            <div class="w-12 h-12 rounded-lg bg-tertiary/10 flex items-center justify-center mr-6 flex-shrink-0">
-                                <i class="fas fa-globe-asia text-tertiary text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold mb-2">Advanced Earth Observation</h3>
-                                <p class="text-slate-400">
-                                    High-resolution, multi-spectral imaging for comprehensive global monitoring and actionable intelligence.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mr-6 flex-shrink-0">
-                                <i class="fas fa-location-crosshairs text-primary text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold mb-2">Precise Positioning & Navigation</h3>
-                                <p class="text-slate-400">
-                                    Centimeter-level accuracy for critical navigation, timing, and tracking applications worldwide.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mr-6 flex-shrink-0">
-                                <i class="fas fa-wifi text-secondary text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold mb-2">High-Speed Communications</h3>
-                                <p class="text-slate-400">
-                                    Robust, low-latency data links for seamless connectivity and rapid information dissemination.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="lg:w-1/2 relative fade-in" style="animation-delay: 0.2s;">
-                    <div class="relative" style="height: 500px;">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="comms-central-satellite">
-                                <div class="satellite" style="width: 120px; height: 24px; position: static; transform: none; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--tertiary));">
-                                    <div class="absolute -top-4 left-1/4 transform -translate-x-1/2 w-1 h-12 bg-primary/50 rounded-full"></div>
-                                    <div class="absolute -top-4 right-1/4 transform translate-x-1/2 w-1 h-12 bg-secondary/50 rounded-full"></div>
-                                    <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-1 h-12 bg-tertiary/50 rounded-full"></div>
-                                </div>
-                            </div>
-                            <div class="comms-connected-satellite" style="top: 15%; left: 15%; animation-delay: 0s;"> <div class="comms-connected-satellite-inner" style="background: var(--primary)"></div> </div>
-                            <div class="comms-connected-satellite" style="bottom: 15%; right: 15%; animation-delay: 1.5s;"> <div class="comms-connected-satellite-inner" style="background: var(--secondary)"></div> </div>
-                            <div class="comms-connected-satellite" style="top: 25%; right: 10%; animation-delay: 0.5s;"> <div class="comms-connected-satellite-inner" style="background: var(--tertiary)"></div> </div>
-                            <div class="comms-connected-satellite" style="bottom: 20%; left: 12%; animation-delay: 1.0s;"> <div class="comms-connected-satellite-inner" style="background: linear-gradient(to right, var(--primary), var(--tertiary));"></div> </div>
-                            <svg class="absolute inset-0 w-full h-full opacity-75" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%"> <stop offset="0%" stop-color="var(--primary)" /> <stop offset="50%" stop-color="var(--secondary)" /> <stop offset="100%" stop-color="var(--tertiary)" /> </linearGradient>
-                                </defs>
-                                <line class="comms-connection-line" style="animation-delay: 0s;" x1="50%" y1="50%" x2="calc(15% + 32px)" y2="calc(15% + 16px)" />
-                                <line class="comms-connection-line" style="animation-delay: 1.5s;" x1="50%" y1="50%" x2="calc(85% - 32px)" y2="calc(85% - 16px)" />
-                                <line class="comms-connection-line" style="animation-delay: 0.5s;" x1="50%" y1="50%" x2="calc(90% - 32px)" y2="calc(25% + 16px)" />
-                                <line class="comms-connection-line" style="animation-delay: 1.0s;" x1="50%" y1="50%" x2="calc(12% + 32px)" y2="calc(80% - 16px)" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="mission" class="section">
-        <div class="container mx-auto px-6 mt-10 mb-10 pb-10 pt-10">
-            <div class="max-w-4xl mx-auto text-center mb-20 fade-in-transform">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">
-                    Pioneering <span class="gradient-text">Comprehensive Space Intelligence</span>
-                </h2>
-                <p class="text-lg text-slate-300">
-                    Our integrated approach delivers enhanced capabilities and efficiency by fusing Earth Observation, PNT, and Communications into a single, resilient LEO constellation.
-                </p>
-            </div>
-
-            <div class="mission-stepper fade-in">
-                <div class="mission-stepper-line-progress"></div>
-                <div class="mission-step" data-step="1">
-                    <div class="mission-step-icon"> <i class="fas fa-wave-square"></i> </div>
-                    <div class="mission-step-content">
-                        <h3 class="text-xl font-semibold mb-3">Synergistic Waveforms & Payloads</h3>
-                        <p class="text-slate-400">Developing innovative, co-designed payloads and signals to efficiently carry EO tasking, PNT data, and communications traffic.</p>
-                    </div>
-                </div>
-                <div class="mission-step" data-step="2">
-                    <div class="mission-step-icon icon-eo"> <i class="fas fa-satellite"></i> </div> <div class="mission-step-content">
-                        <h3 class="text-xl font-semibold mb-3">High-Resolution Earth Insights</h3>
-                        <p class="text-slate-400">Providing persistent, multi-spectral Earth Observation for timely intelligence and environmental monitoring.</p>
-                    </div>
-                </div>
-                <div class="mission-step" data-step="3">
-                    <div class="mission-step-icon"> <i class="fas fa-tachometer-alt"></i> </div>
-                    <div class="mission-step-content">
-                        <h3 class="text-xl font-semibold mb-3">Precision & High-Throughput</h3>
-                        <p class="text-slate-400">Ensuring robust, high-accuracy PNT services alongside significant data transfer capabilities for all integrated services.</p>
-                    </div>
-                </div>
-                 <div class="mission-step" data-step="4">
-                    <div class="mission-step-icon"> <i class="fas fa-brain"></i> </div>
-                    <div class="mission-step-content">
-                        <h3 class="text-xl font-semibold mb-3">AI-Driven Data & Network</h3>
-                        <p class="text-slate-400">Leveraging AI for on-board data processing, intelligent resource allocation, and optimized low-latency network performance across the constellation.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="technology" class="section section-alt-bg">
-        <div class="container mx-auto px-6 mt-10 mb-10 pb-16 pt-16 md:pt-20 md:pb-20">
-            <div class="max-w-4xl mx-auto text-center mb-16 md:mb-24 fade-in-transform">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">
-                    Our <span class="gradient-text">Integrated Technology</span> Stack
-                </h2>
-                <p class="text-lg text-slate-300">
-                    Our innovation is built on four key technology pillars, enabling a seamless fusion of EO, PNT, and Communications. 
-                </p>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-
-            <div class="tech-diagram fade-in">
-                <div class="tech-diagram-center">
-                    <i class="fas fa-atom"></i>
-                    <span>Fused Core</span>
-                </div>
-                <svg class="tech-diagram-lines" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <line class="line-eo" x1="100" y1="100" x2="100" y2="45" />
-                    <line class="line-comms" x1="100" y1="100" x2="155" y2="100" />
-                    <line class="line-pnt" x1="100" y1="100" x2="100" y2="155" />
-                    <line class="line-network" x1="100" y1="100" x2="45" y2="100" />
-                </svg>
-
-                <div class="tech-pillar tech-pillar-1" data-pillar="1" style="--delay: 0.1s;"> <div class="tech-pillar-icon icon-eo-tech"> <i class="fas fa-camera-retro"></i> </div>
-                    <h3>Advanced EO Payloads</h3>
-                    <p>Multi-spectral and high-resolution sensors for comprehensive Earth Observation, from environmental to strategic intelligence.</p>
-                </div>
-
-                <div class="tech-pillar tech-pillar-2" data-pillar="2" style="--delay: 0.2s;"> <div class="tech-pillar-icon"> <i class="fas fa-broadcast-tower"></i> </div>
-                    <h3>Integrated Waveforms</h3>
-                    <p>Novel signal structures carrying PNT, Comms, and EO data, optimizing spectrum use and hardware efficiency.</p>
-                </div>
-
-                <div class="tech-pillar tech-pillar-3" data-pillar="3" style="--delay: 0.3s;"> <div class="tech-pillar-icon"> <i class="fas fa-stopwatch-20"></i> </div>
-                    <h3>Precision Timing & Sync</h3>
-                    <p>Atomic clock-grade timing across the constellation for ultra-accurate PNT and synchronized multi-satellite operations.</p>
-                </div>
-
-                <div class="tech-pillar tech-pillar-4" data-pillar="4" style="--delay: 0.4s;"> <div class="tech-pillar-icon"> <i class="fas fa-project-diagram"></i> </div>
-                    <h3>Agile Constellation Network</h3>
-                    <p>Inter-satellite links and AI-optimized routing for a resilient, low-latency mesh network supporting all services.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="impact" class="section py-28">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto text-center mb-20 fade-in-transform">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">
-                    Unlocking <span class="gradient-text-eo">Transformative</span> Potential
-                </h2>
-                <p class="text-lg text-slate-300">
-                    Our fused EO, PNT, and Comms constellation empowers a new generation of applications across diverse global industries.
-                </p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 fade-in">
-                <div class="impact-card" style="--delay: 0.1s;">
-                    <div class="impact-icon-container icon-plane"> <i class="fas fa-fighter-jet"></i> </div>
-                    <h3 class="text-xl font-semibold mb-3">Autonomous & Robotic Systems</h3>
-                    <p class="text-slate-400">Reliable, high-accuracy positioning, EO context, and real-time data for drones, vehicles, and robotics.</p>
-                </div>
-                 <div class="impact-card" style="--delay: 0.2s;">
-                    <div class="impact-icon-container icon-eo-impact icon-globe-spin"> <i class="fas fa-globe-europe"></i> </div> <h3 class="text-xl font-semibold mb-3">Environmental Monitoring</h3>
-                    <p class="text-slate-400">Track climate change impacts, manage resources, and monitor biodiversity with persistent, high-resolution EO data.</p>
-                </div>
-                <div class="impact-card" style="--delay: 0.3s;">
-                    <div class="impact-icon-container icon-ship"> <i class="fas fa-ship"></i> </div>
-                    <h3 class="text-xl font-semibold mb-3">Maritime & Smart Logistics</h3>
-                    <p class="text-slate-400">Precise asset tracking, EO-enhanced route optimization, and continuous broadband for global supply chains.</p>
-                </div>
-                <div class="impact-card" style="--delay: 0.4s;">
-                    <div class="impact-icon-container icon-eo-impact icon-plant"> <i class="fas fa-seedling"></i> </div> <h3 class="text-xl font-semibold mb-3">Precision Agriculture</h3>
-                    <p class="text-slate-400">Optimize crop yields, monitor soil health, and enable sustainable farming with timely EO insights and precise PNT.</p>
-                </div>
-                <div class="impact-card" style="--delay: 0.5s;">
-                    <div class="impact-icon-container icon-tower"> <i class="fas fa-broadcast-tower"></i> </div>
-                    <h3 class="text-xl font-semibold mb-3">Resilient Connectivity</h3>
-                    <p class="text-slate-400">Critical timing, EO-informed infrastructure planning, and data backhaul for telecom and utilities in underserved areas.</p>
-                </div>
-                <div class="impact-card" style="--delay: 0.6s;">
-                    <div class="impact-icon-container"> <i class="fas fa-house-flood-water"></i> </div> <h3 class="text-xl font-semibold mb-3">Disaster Response & Aid</h3>
-                    <p class="text-slate-400">Rapid damage assessment via EO, resilient PNT/Comms for first responders when terrestrial systems fail.</p>
-                </div>
-                <div class="impact-card" style="--delay: 0.7s;">
-                    <div class="impact-icon-container icon-cogs"> <i class="fas fa-industry"></i> </div>
-                    <h3 class="text-xl font-semibold mb-3">Smart Cities & Infrastructure</h3>
-                    <p class="text-slate-400">Synchronized operations, urban planning with EO data, and real-time monitoring for critical infrastructure.</p>
-                </div>
-                <div class="impact-card" style="--delay: 0.8s;">
-                    <div class="impact-icon-container icon-shield"> <i class="fas fa-user-shield"></i> </div>
-                    <h3 class="text-xl font-semibold mb-3">Government & Defense</h3>
-                    <p class="text-slate-400">Secure, jam-resistant PNT, global EO intelligence, and robust communications for critical national applications.</p>
-                </div>
-                 <div class="impact-card" style="--delay: 0.9s;">
-                    <div class="impact-icon-container icon-eo-impact"> <i class="fas fa-chart-line"></i> </div> <h3 class="text-xl font-semibold mb-3">Financial & Energy Markets</h3>
-                    <p class="text-slate-400">EO-derived economic indicators, asset monitoring for energy infrastructure, and precise timing for financial transactions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section section-alt-bg py-20 md:py-28">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto text-center mb-16 fade-in-transform">
-                 <h2 class="text-3xl md:text-4xl font-bold mb-6">A Universe of <span class="gradient-text">Applications</span></h2>
-                <p class="text-lg text-slate-300">Visualizing the broad impact of our integrated space-based services.</p>
-            </div>
-            <div class="impact-carousel-container fade-in">
-                <div class="impact-carousel-track">
-                    <div class="impact-slide impact-slide-1">
-                        <div class="impact-slide-content">
-                            <div class="impact-slide-icon"><i class="fas fa-satellite-dish"></i></div>
-                            <h3>Global Situational Awareness</h3>
-                            <p>Unparalleled insights from fused EO data, precise location intelligence, and constant communication for strategic decision-making.</p>
-                        </div>
-                    </div>
-                    <div class="impact-slide impact-slide-2">
-                        <div class="impact-slide-content">
-                            <div class="impact-slide-icon"><i class="fas fa-truck-moving"></i></div>
-                            <h3>Smart Logistics & Maritime</h3>
-                            <p>Revolutionizing global trade with hyper-accurate tracking, EO-informed routing, and always-on connectivity for fleets and cargo.</p>
-                        </div>
-                    </div>
-                    <div class="impact-slide impact-slide-3">
-                        <div class="impact-slide-content">
-                            <div class="impact-slide-icon icon-eo-slide"><i class="fas fa-leaf"></i></div>
-                            <h3>Environmental Intelligence</h3>
-                            <p>Empowering climate action and sustainable resource management with continuous, high-fidelity Earth Observation data.</p>
-                        </div>
-                    </div>
-                    <div class="impact-slide impact-slide-4">
-                        <div class="impact-slide-content">
-                            <div class="impact-slide-icon"><i class="fas fa-hard-hat"></i></div>
-                            <h3>Resilient Infrastructure</h3>
-                            <p>Ensuring the stability and efficiency of critical infrastructure through precise timing, remote monitoring, and robust data links.</p>
-                        </div>
-                    </div>
-                    <div class="impact-slide impact-slide-5">
-                        <div class="impact-slide-content">
-                            <div class="impact-slide-icon"><i class="fas fa-robot"></i></div>
-                            <h3>Next-Gen IoT & Robotics</h3>
-                            <p>Fueling the autonomous revolution with the essential triad of precise location, environmental perception, and seamless data exchange.</p>
-                        </div>
-                    </div>
-                     <div class="impact-slide impact-slide-6">
-                        <div class="impact-slide-content">
-                            <div class="impact-slide-icon"><i class="fas fa-shield-halved"></i></div>
-                            <h3>Enhanced Security & Defense</h3>
-                            <p>Providing a tactical edge with secure, resilient PNT, persistent EO surveillance, and reliable battlefield communications.</p>
-                        </div>
-                    </div>
-                </div>
-                <button class="carousel-nav carousel-prev"><i class="fas fa-chevron-left"></i></button>
-                <button class="carousel-nav carousel-next"><i class="fas fa-chevron-right"></i></button>
-            </div>
-        </div>
-    </section>
-
-    <section class="section py-28">
-        <div class="container mx-auto px-6 text-center">
-            <div class="max-w-3xl mx-auto fade-in-transform">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">
-                    Partner with Us to Shape the <span class="gradient-text-eo">Future</span>
-                </h2>
-                <p class="text-lg text-slate-300 mb-10">
-                    We are seeking visionary partners, investors, and talent to realize the full potential of integrated EO, PNT, and Communications. Let's connect and build the next generation of space infrastructure together.
-                </p>
-                <div class="flex justify-center">
                     <a href="mailto:raghavak@sanyark.com" class="cta-button">
-                        <span>Engage with Sanyark</span> <i class="fas fa-envelope"></i>
+                        <span>Engage with Sanyark</span>
+                        <i class="fas fa-envelope"></i>
                     </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="py-12 border-t border-slate-800/50 mt-16">
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="mt-20 py-10 border-t border-slate-800/50">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary via-secondary to-tertiary flex items-center justify-center">
-                        <i class="fas fa-satellite-dish text-white text-lg"></i>
-                    </div>
-                    <span class="text-lg font-semibold">SANYARK SPACE</span>
+                     <i class="fas fa-satellite-dish text-xl highlight-text"></i>
+                    <span class="text-lg font-semibold tracking-wider">SANYARK SPACE</span>
                 </div>
                 <div class="text-slate-400 text-sm">
                     <a href="mailto:raghavak@sanyark.com" class="hover:text-white transition-colors">raghavak@sanyark.com</a>
                 </div>
                 <div class="text-slate-500 text-sm text-center md:text-right">
-                    © 2024 Sanyark Space. Pioneering Integrated Space Solutions.
+                    © 2025 Sanyark Space. All Rights Reserved.
                 </div>
             </div>
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        /**
-         * Creates constellation dots in the Hero Section.
-         */
-        function createConstellationDots() {
-            const container = document.getElementById('constellation-dots');
-            if (!container) { console.warn('Constellation dots container not found.'); return; }
-            const dotCount = 40; // Increased slightly
-            const fragment = document.createDocumentFragment();
-            for (let i = 0; i < dotCount; i++) {
-                const dot = document.createElement('div'); dot.className = 'constellation-dot';
-                dot.style.left = `${Math.random() * 100}%`; dot.style.top = `${Math.random() * 100}%`;
-                const size = Math.random() * 2.5 + 0.5; dot.style.width = `${size}px`; dot.style.height = `${size}px`;
-                const fadeInDelay = Math.random() * 1.2; const twinkleDuration = Math.random() * 4 + 3; const twinkleDelay = fadeInDelay + 1.5;
-                dot.style.animationDelay = `${fadeInDelay}s, ${twinkleDelay}s`; dot.style.animationDuration = `1.5s, ${twinkleDuration}s`;
-                fragment.appendChild(dot);
-            }
-            container.appendChild(fragment);
-        }
-
+    document.addEventListener('DOMContentLoaded', () => {
         /**
          * Sets up Intersection Observer to trigger animations when elements enter viewport.
          */
-        function setupIntersectionObserver() {
-            const elementsToObserve = document.querySelectorAll('.fade-in, .fade-in-transform');
+        const setupIntersectionObserver = () => {
+            const elementsToObserve = document.querySelectorAll('.fade-in-up, .fade-in');
 
             const observerCallback = (entries, observer) => {
                 entries.forEach(entry => {
-                    const delay = parseFloat(entry.target.style.getPropertyValue('--delay') || '0') * 1000;
                     if (entry.isIntersecting) {
+                        const delay = parseInt(entry.target.style.getPropertyValue('--delay')) || 0;
                         setTimeout(() => {
                             entry.target.classList.add('visible');
-                            if (entry.target.classList.contains('mission-step')) {
-                                animateMissionLine();
-                            }
-                            // Unobserve after animation for general elements, but keep observing mission steps for line animation
-                            if (!entry.target.classList.contains('mission-step') && !entry.target.classList.contains('tech-pillar')) {
-                                observer.unobserve(entry.target);
-                            }
                         }, delay);
-                    } else {
-                        // Optional: Reset if it scrolls out of view and you want re-trigger
-                        // if (entry.target.classList.contains('mission-step')) {
-                        //     entry.target.classList.remove('visible');
-                        //     animateMissionLine(); // Recalculate line if steps become hidden
-                        // }
+                        observer.unobserve(entry.target);
                     }
                 });
             };
 
-            const observerOptions = { threshold: 0.15 }; // Trigger when 15% visible
+            const observerOptions = {
+                threshold: 0.1
+            };
             const observer = new IntersectionObserver(observerCallback, observerOptions);
-            elementsToObserve.forEach(element => { observer.observe(element); });
-        }
-
-        /**
-         * Animates the vertical line in the Mission stepper based on visible steps.
-         */
-        function animateMissionLine() {
-            const stepper = document.querySelector('.mission-stepper');
-            const lineProgress = document.querySelector('.mission-stepper-line-progress');
-            const steps = Array.from(document.querySelectorAll('.mission-step'));
-            if (!stepper || !lineProgress || steps.length === 0) return;
-
-            let lastVisibleStep = null;
-            for (let i = 0; i < steps.length; i++) { // Iterate forwards to find the *last* one that's visible
-                if (steps[i].classList.contains('visible')) {
-                    lastVisibleStep = steps[i];
-                }
-            }
-
-            if (lastVisibleStep) {
-                const icon = lastVisibleStep.querySelector('.mission-step-icon');
-                if (!icon) return;
-                // Calculate distance from top of stepper to center of the icon of the last visible step
-                const stepperTopOffset = parseFloat(getComputedStyle(stepper).paddingTop) || 0;
-                const iconCenterYInStep = icon.offsetTop + icon.offsetHeight / 2;
-                const totalOffset = lastVisibleStep.offsetTop + iconCenterYInStep - stepperTopOffset;
-                
-                lineProgress.style.height = `${Math.max(0, totalOffset)}px`;
-            } else {
-                lineProgress.style.height = '0px';
-            }
-        }
+            elementsToObserve.forEach(element => {
+                observer.observe(element);
+            });
+        };
 
         /**
          * Sets up smooth scrolling for anchor links.
          */
-        function setupSmoothScroll() {
+        const setupSmoothScroll = () => {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    e.preventDefault(); const targetId = this.getAttribute('href');
-                    if (!targetId || targetId === '#') return;
-                    try {
-                        const targetElement = document.querySelector(targetId);
-                        if(targetElement) {
-                            const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 70; // Adjusted default
-                            const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = window.pageYOffset + elementPosition - navbarHeight - 20; // Extra 20px padding
-                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                        } else { console.warn(`Smooth scroll target element not found: ${targetId}`); }
-                    } catch (error) { console.error(`Error finding smooth scroll target: ${targetId}`, error); }
-                });
-            });
-        }
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 72;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = window.pageYOffset + elementPosition - navbarHeight;
 
-        /**
-         * Adds interaction to technology diagram pillars.
-         */
-        function setupTechDiagramInteraction() {
-            const pillars = document.querySelectorAll('.tech-pillar');
-            const diagram = document.querySelector('.tech-diagram');
-
-            pillars.forEach(pillar => {
-                const icon = pillar.querySelector('.tech-pillar-icon');
-                // Show details on mouse enter for icon
-                icon.addEventListener('mouseenter', () => {
-                    pillars.forEach(p => p.classList.remove('active'));
-                    pillar.classList.add('active');
-                });
-                // Keep active if mouse is over the pillar content area
-                pillar.addEventListener('mouseenter', () => {
-                    if (!pillar.classList.contains('active')) {
-                         pillars.forEach(p => p.classList.remove('active'));
-                         pillar.classList.add('active');
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
                     }
                 });
             });
+        };
+        
+        /**
+         * Sets up the interactive technology stack section.
+         */
+        const setupTechnologyStack = () => {
+            const pills = document.querySelectorAll('.tech-pill');
+            const contents = document.querySelectorAll('.tech-content');
 
-            // Deactivate when clicking or moving mouse outside the diagram area
-            if(diagram) {
-                diagram.addEventListener('mouseleave', () => {
-                     pillars.forEach(p => p.classList.remove('active'));
+            pills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    const targetId = pill.dataset.target;
+                    
+                    // Update pills
+                    pills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    
+                    // Update content
+                    contents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === targetId) {
+                            content.classList.add('active');
+                        }
+                    });
                 });
-            }
-            document.addEventListener('click', (e) => {
-                if (diagram && !diagram.contains(e.target)) {
-                    pillars.forEach(p => p.classList.remove('active'));
-                }
             });
-        }
-
+        };
 
         /**
-         * Initializes and controls the Impact section carousel.
+         * Initializes the Three.js hero canvas animation.
          */
-        function setupImpactCarousel() {
-            const track = document.querySelector('.impact-carousel-track');
-            if (!track) { console.warn("Carousel track not found."); return; }
+        const initHeroAnimation = () => {
+            const canvas = document.getElementById('hero-canvas');
+            if (!canvas) return;
 
-            const slides = Array.from(track.children);
-            const nextButton = document.querySelector('.carousel-next');
-            const prevButton = document.querySelector('.carousel-prev');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            if (!nextButton || !prevButton || slides.length === 0) {
-                console.warn("Carousel navigation or slides not found.");
-                return;
+            // Particles
+            const particlesGeometry = new THREE.BufferGeometry;
+            const count = 5000;
+            const positions = new Float32Array(count * 3);
+            for(let i = 0; i < count * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 10;
             }
-
-            let currentIndex = 0;
-            let slideWidth = slides[0].getBoundingClientRect().width; // Initial width
-
-            const moveToSlide = (targetIndex) => {
-                // Loop around
-                if (targetIndex < 0) { targetIndex = slides.length - 1; }
-                else if (targetIndex >= slides.length) { targetIndex = 0; }
-
-                track.style.transform = `translateX(-${targetIndex * 100}%)`;
-                currentIndex = targetIndex;
-            };
-
-            nextButton.addEventListener('click', () => moveToSlide(currentIndex + 1));
-            prevButton.addEventListener('click', () => moveToSlide(currentIndex - 1));
-
-            let autoPlayInterval = null;
-            const startAutoPlay = (interval = 5500) => { // Slightly longer interval
-                stopAutoPlay();
-                autoPlayInterval = setInterval(() => moveToSlide(currentIndex + 1), interval);
-            };
-            const stopAutoPlay = () => clearInterval(autoPlayInterval);
-
-            startAutoPlay();
-            const container = document.querySelector('.impact-carousel-container');
-            if(container) {
-                container.addEventListener('mouseenter', stopAutoPlay);
-                container.addEventListener('mouseleave', startAutoPlay);
-            }
-
-            // Recalculate width on resize
-            window.addEventListener('resize', () => {
-                slideWidth = slides[0].getBoundingClientRect().width;
-                const tempTransition = track.style.transition;
-                track.style.transition = 'none'; // Move instantly
-                track.style.transform = `translateX(-${currentIndex * 100}%)`;
-                // Force reflow if needed
-                // void track.offsetWidth;
-                setTimeout(() => { track.style.transition = tempTransition; }, 50);
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                color: 0x06B6D4, // highlight color
+                transparent: true,
+                blending: THREE.AdditiveBlending
             });
-        }
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
 
-        // --- Initialize Page ---
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                createConstellationDots();
-                setupIntersectionObserver(); // Crucial: run before animations depending on 'visible'
-                setupSmoothScroll();
-                setupTechDiagramInteraction();
-                setupImpactCarousel();
-            } catch (error) {
-                console.error("Error during page initialization:", error);
-            }
-            // Initial check for mission line animation in case steps are already visible on load (e.g. after refresh)
-            setTimeout(animateMissionLine, 200); // Slight delay to ensure layout is stable
-        });
+            camera.position.z = 5;
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+
+            // Mouse movement
+            const mouse = new THREE.Vector2();
+            window.addEventListener('mousemove', (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            const clock = new THREE.Clock();
+            const animate = () => {
+                const elapsedTime = clock.getElapsedTime();
+                
+                // Animate particles
+                particles.rotation.y = elapsedTime * 0.05;
+                particles.rotation.x = elapsedTime * 0.02;
+
+                // Animate camera to follow mouse
+                camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.02;
+                camera.position.y += (mouse.y * 0.5 - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+                window.requestAnimationFrame(animate);
+            };
+
+            animate();
+        };
+        
+        // --- Initialize All Scripts ---
+        try {
+            setupIntersectionObserver();
+            setupSmoothScroll();
+            setupTechnologyStack();
+            initHeroAnimation();
+        } catch (error) {
+            console.error("Error during page initialization:", error);
+        }
+    });
     </script>
 </body>
 </html>
